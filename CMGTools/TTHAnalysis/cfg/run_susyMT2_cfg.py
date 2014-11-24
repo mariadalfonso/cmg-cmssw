@@ -49,7 +49,8 @@ ttHTauAna.vetoLeptonsPOG = True
 # Photon
 ttHPhoAna.etaCentral = 2.4
 
-
+#Met
+ttHMetAna.doTkMet = True
 
 ##------------------------------------------
 ##  ISOLATED TRACK
@@ -150,10 +151,11 @@ selectedComponents = [ TTJets_PU20bx25 ]
 
 #selectedComponents = [ SMS_T1qqqq_2J_mGl1000_mLSP800_PU_S14_POSTLS170 ]
 
+
 #-------- SEQUENCE
 
 sequence = cfg.Sequence(susyCoreSequence+[
-    ttHIsoTrackAna,
+#    ttHIsoTrackAna,
     ttHMT2Control,
     ttHTopoJetAna,
     treeProducer,
@@ -163,16 +165,27 @@ sequence = cfg.Sequence(susyCoreSequence+[
 test = 1
 if test==1:
     # test a single component, using a single thread.
-    comp=TTJets_PU20bx25 #TTJets_forSynch
     #comp=SMS_T1qqqq_2J_mGl1400_mLSP100_PU_S14_POSTLS170 # small files for testing
     #comp=SMS_T1bbbb_2J_mGl1000_mLSP900_PU_S14_POSTLS170
     #comp.files = ['/afs/cern.ch/work/p/pandolf/CMSSW_7_0_6_patch1_2/src/CMGTools/TTHAnalysis/cfg/pickevents.root']
+    comp=TTJets_PU20bx25 #TTJets_forSynch
     comp.files = ['/afs/cern.ch/user//m/mmasciov/public/TTJets_forSynch_1.root']
-    comp.files = comp.files[:1]
+    #comp=ZJetsToNuNu_HT100to200_PU_S14_POSTLS170
+    #comp.files = ['/afs/cern.ch/user/d/dalfonso/public/ZJetsToNuNu_HT-100to200_outfile_9_1_azH.root'] 
+    #comp=DYJetsM50_HT100to200_PU_S14_POSTLS170 #DYJetsM50
+    #comp.files = ['/afs/cern.ch/user/d/dalfonso/public/DYJetsToLL_M-50_HT-100to200_outfile_6_1_K0R.root']  
+    #comp=GJets_HT100to200_PU_S14_POSTLS170
+    #comp.files = ['/afs/cern.ch/work/d/dalfonso/public/GJets_HT-100to200_Tune4C_13TeV-madgraph_outfile_9_1_6tx.root']
+    #comp=TTJets_MSDecaysCKM_central_PU_S14_POSTLS170
+    #comp.files = comp.files[:600]
+#    comp=SMS_T1qqqq_2J_mGl1000_mLSP800_PU_S14_POSTLS170
+#    comp.files = ['/afs/cern.ch/work/d/dalfonso/public/AOD-prod_PAT_6.root']
+#    comp.files = comp.files[:1]
     selectedComponents = [comp]
-    comp.splitFactor = 10
+    comp.splitFactor = 600
 elif test==2:
-    selectedComponents = [ SingleMu, DoubleElectron, TTHToWW_PUS14, DYJetsM50_PU20bx25, TTJets_PUS14 ]
+#    selectedComponents = [ SingleMu, DoubleElectron, TTHToWW_PUS14, DYJetsM50_PU20bx25, TTJets_PUS14 ]
+    selectedComponents = [ SMS_T2tt_2J_mStop425_mLSP325_PU_S14_POSTLS170, SMS_T2tt_2J_mStop500_mLSP325_PU_S14_POSTLS170, SMS_T2tt_2J_mStop650_mLSP325_PU_S14_POSTLS170, SMS_T2tt_2J_mStop850_mLSP100_PU_S14_POSTLS170, SMS_T2bb_2J_mStop600_mLSP580_PU_S14_POSTLS170, SMS_T2bb_2J_mStop900_mLSP100_PU_S14_POSTLS170, SMS_T2qq_2J_mStop1200_mLSP100_PU_S14_POSTLS170, SMS_T2qq_2J_mStop600_mLSP550_PU_S14_POSTLS170 ]
     # test all components (1 thread per component).
     for comp in selectedComponents:
         comp.splitFactor = 251

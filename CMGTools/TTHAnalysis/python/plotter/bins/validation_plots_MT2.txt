@@ -43,6 +43,7 @@ HLT_Photons    : HLT_Photons    : [-0.5,0.5,1.5]; XTitle="HLT"
 ##### MT2
 
 mt2:   mt2: 16,0,800    ; XTitle="MT2  [GeV]"
+mt2_KT:   mt2ViaKt_had: 16,0,800    ; XTitle="MT2(KT)  [GeV]"
 
 mt2_gen:   mt2_gen: 16,0,800    ; XTitle="MT2 gen  [GeV]"
 

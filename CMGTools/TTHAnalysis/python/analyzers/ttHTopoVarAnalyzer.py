@@ -22,7 +22,6 @@ from CMGTools.RootTools.utils.DeltaR import *
 import ROOT
 
 from ROOT import Hemisphere
-#from ROOT import HemisphereViaKt
 from ROOT import ReclusterJets
 
 from ROOT import Davismt2
@@ -96,13 +95,15 @@ class ttHTopoVarAnalyzer( Analyzer ):
 
         objects40jc = [ j for j in event.cleanJets if j.pt() > 40 and abs(j.eta())<2.5 ]
 
+
+#### get hemispheres via AntiKT -1 antikt, 1 kt, 0 CA                                                                                                                                    
         if len(objects40jc)>=2:
 
             objects  = ROOT.std.vector(ROOT.reco.Particle.LorentzVector)()
             for jet in objects40jc:
                 objects.push_back(jet.p4())
 
-            hemisphereViaKt = ReclusterJets(objects, 1.,50.)
+            hemisphereViaKt = ReclusterJets(objects, 1.,50.0)
             groupingViaKt=hemisphereViaKt.getGroupingExclusive()
 
             if len(groupingViaKt)>=2:
@@ -111,14 +112,12 @@ class ttHTopoVarAnalyzer( Analyzer ):
                 event.mt2ViaKt_had = self.computeMT2(event.pseudoViaKtJet1_had, event.pseudoViaKtJet2_had, event.met)
 
             if not self.cfg_ana.doOnlyDefault:
-#### get hemispheres via AntiKT -1 antikt, 1 kt, 0 CA                                                                                                                                    
-                hemisphereViaAKt = ReclusterJets(objects, -1.,50.)
+                hemisphereViaAKt = ReclusterJets(objects, -1.,50.0)
                 groupingViaAKt=hemisphereViaAKt.getGroupingExclusive()
 
                 if len(groupingViaAKt)>=2:
                     event.pseudoViaKtJet1_had = groupingViaAKt[0]
                     event.pseudoViaKtJet2_had = groupingViaAKt[1]
-                        
                     event.mt2ViaAKt_had = self.computeMT2(event.pseudoViaAKtJet1_had, event.pseudoViaAKtJet2_had, event.met)
 
 #### get hemispheres (seed 2: max inv mass, association method: default 3 = minimal lund distance)
