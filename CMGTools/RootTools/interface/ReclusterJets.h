@@ -26,6 +26,8 @@ class ReclusterJets {
 
   /// get grouping (inclusive jets)
   std::vector<LorentzVector> getGrouping();
+  /// get grouping (exclusive jets)
+  std::vector<LorentzVector> getGroupingExclusive();
 
  private:
 
@@ -39,11 +41,15 @@ class ReclusterJets {
 
   /// fastjet outputs
   std::vector<fastjet::PseudoJet> inclusiveJets_;          // fastjet jets
+  std::vector<fastjet::PseudoJet> exclusiveJets_;          // fastjet jets
+
   typedef boost::shared_ptr<fastjet::ClusterSequence>  ClusterSequencePtr;
   ClusterSequencePtr fjClusterSeq_;    
 
   /// friendly outputs
   std::vector<LorentzVector> JetObjectsAll_;
+  std::vector<LorentzVector> JetObjectsExclusive_;
+
 };
 
 //FASTJET_END_NAMESPACE

@@ -1,31 +1,51 @@
 #include "CMGTools/RootTools/interface/HemisphereViaKt.h"
+#include "FWCore/Utilities/interface/Exception.h"
 
-//using namespace std;
+using namespace std;
 using namespace fastjet;
 
 using std::vector;
 using std::cout;
 using std::endl;
 
-HemisphereViaKt::HemisphereViaKt(vector<float> Px_vector, vector<float> Py_vector, vector<float> Pz_vector,
-				 vector<float> E_vector) : Object_Px(Px_vector),
-							   Object_Py(Py_vector), Object_Pz(Pz_vector), Object_E(E_vector), ktpower(-1), status(0), dbg(1) {
+HemisphereViaKt::HemisphereViaKt(const std::vector<LorentzVector> & objects) : 
+  ktpower(-1), status(0), dbg(1) {
   numLoop =0;
+
+  fjInputs_.clear();
+  int index=0;
+  for (const LorentzVector &o : objects) {
+    fastjet::PseudoJet j(o.Px(),o.Py(),o.Pz(),o.E());
+    j.set_user_index(index); index++; // in case we want to know which piece ended where
+    fjInputs_.push_back(j);
+  }
+
+
+
 }
 
-HemisphereViaKt::HemisphereViaKt(vector<float> Px_vector, vector<float> Py_vector, vector<float> Pz_vector,
-				 vector<float> E_vector, double ktpower) : Object_Px(Px_vector),
-									Object_Py(Py_vector), Object_Pz(Pz_vector), Object_E(E_vector), ktpower_(ktpower), rparam_(50.0), status(0), dbg(1) {
+HemisphereViaKt::HemisphereViaKt(const std::vector<LorentzVector> & objects,double ktpower) : 
+  ktpower_(ktpower), rparam_(50.0), status(0), dbg(1) {
   numLoop =0;
+
+  fjInputs_.clear();
+  int index=0;
+  for (const LorentzVector &o : objects) {
+    fastjet::PseudoJet j(o.Px(),o.Py(),o.Pz(),o.E());
+    j.set_user_index(index); index++; // in case we want to know which piece ended where
+    fjInputs_.push_back(j);
+  }
+
 }
 
-std::vector<vector<float> > HemisphereViaKt::getGrouping(){
+std::vector<math::XYZTLorentzVector > HemisphereViaKt::getGrouping(){
   this->Reconstruct();
-  return JetObjectAll;
+  return JetObjectsAll_;
 }
 
 int HemisphereViaKt::Reconstruct(){
 
+  /*
   numLoop=0; // initialize numLoop for Zero
   int vsize = (int) Object_Px.size();
   if((int) Object_Py.size() != vsize || (int) Object_Pz.size() != vsize){
@@ -42,6 +62,7 @@ int HemisphereViaKt::Reconstruct(){
     //if ( fabs(j.rap()) < inputEtaMax )
     fjInputs_.push_back(j);
   }
+  */
 
   // choose a jet definition
   fastjet::JetDefinition jet_def;
@@ -69,7 +90,7 @@ int HemisphereViaKt::Reconstruct(){
 
   //  cout << "number of jets " << fjInputs_.size() << endl;
   //  cout << "number of hemispheres " << exclusiveJets.size() << endl;
-
+  /*
   for (unsigned int i = 0; i <exclusiveJets.size(); ++i){
     
     JetObject_Px.push_back(exclusiveJets.at(i).px());
@@ -78,14 +99,13 @@ int HemisphereViaKt::Reconstruct(){
     //    cout << " py=" << exclusiveJets.at(i).py() << endl;
     JetObject_Pz.push_back(exclusiveJets.at(i).pz());
     JetObject_E.push_back(exclusiveJets.at(i).e());
-
-
   }
+  */
 
-  JetObjectAll.push_back(JetObject_Px);
-  JetObjectAll.push_back(JetObject_Py);
-  JetObjectAll.push_back(JetObject_Pz);
-  JetObjectAll.push_back(JetObject_E);
+  JetObjectsAll_.clear();
+  for (const fastjet::PseudoJet & pj : exclusiveJets) {
+    JetObjectsAll_.push_back( LorentzVector( pj.px(), pj.py(), pj.pz(), pj.e() ) );
+  }
 
   /*
   for (unsigned int i = 0; i < exclusiveJets.size(); i++ ) {
@@ -101,7 +121,7 @@ int HemisphereViaKt::Reconstruct(){
   */
 
 
-  if(JetObjectAll.size()<2) return -1;
+  if(JetObjectsAll_.size()<2) return -1;
   return 1;
     
     

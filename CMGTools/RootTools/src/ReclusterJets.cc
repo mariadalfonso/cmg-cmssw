@@ -7,8 +7,8 @@ using namespace std;
 using namespace fastjet;
 
 
-ReclusterJets::ReclusterJets(const std::vector<LorentzVector> & objects, double ktpower, double rparam) : 
-    ktpower_(ktpower), rparam_(rparam) 
+ReclusterJets::ReclusterJets(const std::vector<LorentzVector> & objects, double ktpower, double rparam ) : 
+  ktpower_(ktpower), rparam_(rparam)
 {
   // define jet inputs
   fjInputs_.clear();
@@ -24,6 +24,11 @@ ReclusterJets::ReclusterJets(const std::vector<LorentzVector> & objects, double 
 std::vector<math::XYZTLorentzVector> ReclusterJets::getGrouping() {
   if (JetObjectsAll_.empty()) this->Reconstruct();
   return JetObjectsAll_;
+}
+
+std::vector<math::XYZTLorentzVector> ReclusterJets::getGroupingExclusive() {
+  if (JetObjectsExclusive_.empty()) this->Reconstruct();
+  return JetObjectsExclusive_;
 }
 
 int ReclusterJets::Reconstruct(){
@@ -49,10 +54,16 @@ int ReclusterJets::Reconstruct(){
 
   // recluster jet
   inclusiveJets_ = fastjet::sorted_by_pt( fjClusterSeq_->inclusive_jets());
+  exclusiveJets_ = fastjet::sorted_by_pt( fjClusterSeq_->exclusive_jets(2)); 
 
   JetObjectsAll_.clear();
   for (const fastjet::PseudoJet & pj : inclusiveJets_) {
     JetObjectsAll_.push_back( LorentzVector( pj.px(), pj.py(), pj.pz(), pj.e() ) );
+  }
+
+  JetObjectsExclusive_.clear();
+  for (const fastjet::PseudoJet & pj : exclusiveJets_) {
+    JetObjectsExclusive_.push_back( LorentzVector( pj.px(), pj.py(), pj.pz(), pj.e() ) );
   }
 
   //if(JetObjectAll.size()==0) return -1;

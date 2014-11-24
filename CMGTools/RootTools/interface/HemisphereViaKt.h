@@ -6,6 +6,7 @@
 #include <cmath>
 #include <TLorentzVector.h>
 #include <TMath.h>
+#include "DataFormats/Math/interface/LorentzVector.h"
 
 using namespace std;
 using std::vector;
@@ -26,11 +27,15 @@ class HemisphereViaKt {
     
  public:
 
-  HemisphereViaKt(vector<float> Px_vector, vector<float> Py_vector, vector<float> Pz_vector, vector<float> E_vector);
-  HemisphereViaKt(vector<float> Px_vector, vector<float> Py_vector, vector<float> Pz_vector, vector<float> E_vector, double ktpower);
+  typedef math::XYZTLorentzVector LorentzVector;
+
+  //  HemisphereViaKt(vector<float> Px_vector, vector<float> Py_vector, vector<float> Pz_vector, vector<float> E_vector);
+  //  HemisphereViaKt(vector<float> Px_vector, vector<float> Py_vector, vector<float> Pz_vector, vector<float> E_vector, double ktpower);
+  HemisphereViaKt(const std::vector<LorentzVector> & objects);
+  HemisphereViaKt(const std::vector<LorentzVector> & objects, double ktpower);
 
   // get grouping
-  std::vector<vector<float> > getGrouping();
+  std::vector<math::XYZTLorentzVector> getGrouping();
 
 
  private:
@@ -44,12 +49,14 @@ class HemisphereViaKt {
   vector<float> Object_Pz;
   vector<float> Object_E;
 
+  /*
   // used to store the exclusive jets
   vector<float> JetObject_Px;
   vector<float> JetObject_Py;
   vector<float> JetObject_Pz;
   vector<float> JetObject_E;
-  std::vector<vector<float> > JetObjectAll;
+  */
+  std::vector<LorentzVector > JetObjectsAll_;
 
   std::vector<fastjet::PseudoJet> fjInputs_;        // fastjet inputs
   std::vector<fastjet::PseudoJet> fjJets_;          // fastjet jets
