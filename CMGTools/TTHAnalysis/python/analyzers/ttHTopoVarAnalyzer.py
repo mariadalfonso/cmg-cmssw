@@ -104,7 +104,7 @@ class ttHTopoVarAnalyzer( Analyzer ):
                 objects.push_back(jet.p4())
 
             hemisphereViaKt = ReclusterJets(objects, 1.,50.0)
-            groupingViaKt=hemisphereViaKt.getGroupingExclusive()
+            groupingViaKt=hemisphereViaKt.getGroupingExclusive(2)
 
             if len(groupingViaKt)>=2:
                 event.pseudoViaKtJet1_had = groupingViaKt[0]
@@ -113,7 +113,7 @@ class ttHTopoVarAnalyzer( Analyzer ):
 
             if not self.cfg_ana.doOnlyDefault:
                 hemisphereViaAKt = ReclusterJets(objects, -1.,50.0)
-                groupingViaAKt=hemisphereViaAKt.getGroupingExclusive()
+                groupingViaAKt=hemisphereViaAKt.getGroupingExclusive(2)
 
                 if len(groupingViaAKt)>=2:
                     event.pseudoViaKtJet1_had = groupingViaAKt[0]
