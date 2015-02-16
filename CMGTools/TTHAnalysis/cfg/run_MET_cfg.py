@@ -216,18 +216,11 @@ ttHZskim = cfg.Analyzer(
 ##  PRODUCER
 ##------------------------------------------
 
-from CMGTools.TTHAnalysis.samples.samples_13TeV_PHYS14 import triggers_HT900, triggers_MET170, triggers_HTMET, triggers_MT2_mumu, triggers_MT2_ee, triggers_MT2_mue, triggers_1mu, triggers_photon155,triggers_1mu_isolow
+from CMGTools.TTHAnalysis.samples.samples_13TeV_PHYS14 import triggers_1mu, triggers_mumu_iso, triggers_1mu_isolow
 
 triggerFlagsAna.triggerBits = {
-            'HT900' : triggers_HT900,
-            'MET170' : triggers_MET170,
-            'ht350met120' : triggers_HTMET,
             'SingleMu' : triggers_1mu_isolow,
-            'DoubleMu' : triggers_MT2_mumu,
-            'DoubleEl' : triggers_MT2_ee,
-            'MuEG'     : triggers_MT2_mue,
-            'htXprescale' : triggers_HTMET,
-            'Photons'  : triggers_photon155
+            'DoubleMu' : triggers_mumu_iso,
 }
 
 #-------- SEQUENCE
@@ -276,7 +269,7 @@ metSequence = [
 from CMGTools.TTHAnalysis.samples.samples_13TeV_PHYS14 import *
 
 #-------- HOW TO RUN
-test = 1
+test = 2
 if test==1:
     # test a single component, using a single thread.
     ## 25 ns ttbar PHYS14
@@ -290,7 +283,7 @@ if test==1:
     selectedComponents = [comp]
     comp.splitFactor = 10
 elif test==2:
-    selectedComponents = [ SingleMu, DoubleElectron, TTHToWW_PUS14, DYJetsToLL_M50_PU20bx25, TTJets_PUS14 ]
+    selectedComponents = [ DYJetsToLL_M50_PU4bx50,DYJetsToLL_M50 ]
     # test all components (1 thread per component).
     for comp in selectedComponents:
         comp.splitFactor = 251
