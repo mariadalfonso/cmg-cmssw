@@ -98,8 +98,8 @@ class METAnalyzer( Analyzer ):
         event.metNoPU = self.handles['nopumet'].product()[0]
 
         ###https://github.com/cms-sw/cmssw/blob/CMSSW_7_2_X/DataFormats/PatCandidates/interface/MET.h
-        event.metraw = event.met.shiftedPt(12, 0)
-        event.metType1chs = event.met.shiftedPt(12, 1)
+        event.metraw = event.met.shiftedPt(event.met.NoShift, event.met.Type1)
+        event.metType1chs = event.met.shiftedPt(event.met.NoShift, event.met.Raw)
 
         if self.cfg_ana.recalibrate and hasattr(event, 'deltaMetFromJetSmearing'):
             px,py = event.met.px()+event.deltaMetFromJetSmearing[0], event.met.py()+event.deltaMetFromJetSmearing[1]
