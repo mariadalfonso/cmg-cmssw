@@ -267,9 +267,12 @@ metSequence = [
 #from CMGTools.TTHAnalysis.samples.samples_13TeV_CSA14 import * 
 #from CMGTools.TTHAnalysis.samples.samples_13TeV_CSA14v2 import *
 from CMGTools.TTHAnalysis.samples.samples_13TeV_PHYS14 import *
+from CMGTools.TTHAnalysis.samples.samples_METPOG_private import *
+
+selectedComponents = [JetHT_HcalExtValid_jet2012D_v1, JetHT_HcalExtValid_jet2012D_v2, DoubleMuparked_HcalExtValid_jet2012D_v1]
 
 #-------- HOW TO RUN
-test = 2
+test = 1
 if test==1:
     # test a single component, using a single thread.
     ## 25 ns ttbar PHYS14
@@ -277,11 +280,11 @@ if test==1:
 #    comp.files = comp.files[:1]
 #    comp=TTJets
 #    comp.files = ['/afs/cern.ch/work/d/dalfonso/public/ttjets_miniaodsim_00C90EFC-3074-E411-A845-002590DB9262.root']
-    comp=DYJetsToLL_M50_PU4bx50
+    comp=JetHT_HcalExtValid_jet2012D_v1
     comp.files = comp.files[:1]
 
     selectedComponents = [comp]
-    comp.splitFactor = 10
+    comp.splitFactor = 1
 elif test==2:
     selectedComponents = [ DYJetsToLL_M50_PU4bx50,DYJetsToLL_M50 ]
     # test all components (1 thread per component).
