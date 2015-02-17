@@ -4,9 +4,6 @@ met_globalVariables = [
     NTupleVariable("rho",  lambda ev: ev.rho, float, help="kt6PFJets rho"),
     NTupleVariable("nVert",  lambda ev: len(ev.goodVertices), int, help="Number of good vertices"),
 
-    NTupleVariable("metraw_pt", lambda ev : ev.metraw, help="rawmet"),
-    NTupleVariable("metType1chs_pt", lambda ev : ev.metType1chs, help="metType1chs"),
-
     NTupleVariable("tkmet_pt", lambda ev : ev.tkMet.pt(), help="TK E_{T}^{miss} pt"),                                                                                                    
     NTupleVariable("tkmet_phi", lambda ev : ev.tkMet.phi(), help="TK E_{T}^{miss} phi"),    
 
@@ -19,6 +16,8 @@ met_globalVariables = [
 
 met_globalObjects = {
     "met" : NTupleObject("met", metType, help="PF E_{T}^{miss}, after type 1 corrections"),
+    "metraw" : NTupleObject("metraw", metType, help="PF E_{T}^{miss}"),
+    "metType1chs" : NTupleObject("metType1chs", metType, help="PF E_{T}^{miss}, after type 1 CHS jets"),
     #"tkMet" : NTupleObject("tkmet", metType, help="TK PF E_{T}^{miss}"),
     #"metNoPU" : NTupleObject("metNoPU", fourVectorType, help="PF noPU E_{T}^{miss}"),
     }
