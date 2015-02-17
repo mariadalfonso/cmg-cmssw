@@ -98,8 +98,18 @@ class METAnalyzer( Analyzer ):
         event.metNoPU = self.handles['nopumet'].product()[0]
 
         ###https://github.com/cms-sw/cmssw/blob/CMSSW_7_2_X/DataFormats/PatCandidates/interface/MET.h
-        event.metraw = event.met.shiftedPt(event.met.NoShift, event.met.Type1)
-        event.metType1chs = event.met.shiftedPt(event.met.NoShift, event.met.Raw)
+        #        event.metraw = event.met.shiftedPt(event.met.NoShift, event.met.Raw)
+        #        event.metType1chs = event.met.shiftedPt(event.met.NoShift, event.met.Type1)
+
+        event.metraw = copy.deepcopy(event.met)
+        event.metType1chs = copy.deepcopy(event.met)
+
+        rawpx,rawpy = event.met.shiftedPx(event.met.NoShift, event.met.Raw) , event.met.shiftedPy(event.met.NoShift, event.met.Raw)
+        event.metraw.setP4(ROOT.reco.Particle.LorentzVector(rawpx,rawpy, 0, math.hypot(rawpx,rawpy)))
+
+        chspx,chspy = event.met.shiftedPx(event.met.NoShift, event.met.Type1) , event.met.shiftedPy(event.met.NoShift, event.met.Type1)
+        event.metType1chs.setP4(ROOT.reco.Particle.LorentzVector(chspx,chspy, 0, math.hypot(chspx,chspy)))
+
 
         if self.cfg_ana.recalibrate and hasattr(event, 'deltaMetFromJetSmearing'):
             px,py = event.met.px()+event.deltaMetFromJetSmearing[0], event.met.py()+event.deltaMetFromJetSmearing[1]
