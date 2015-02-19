@@ -4,8 +4,17 @@ met_globalVariables = [
     NTupleVariable("rho",  lambda ev: ev.rho, float, help="kt6PFJets rho"),
     NTupleVariable("nVert",  lambda ev: len(ev.goodVertices), int, help="Number of good vertices"),
 
-    NTupleVariable("tkmet_pt", lambda ev : ev.tkMet.pt(), help="TK E_{T}^{miss} pt"),                                                                                                    
-    NTupleVariable("tkmet_phi", lambda ev : ev.tkMet.phi(), help="TK E_{T}^{miss} phi"),    
+    NTupleVariable("tkmet_pt", lambda ev : ev.tkMet.pt(), help="TK E_{T}^{miss} dz<0.1 pt"),
+    NTupleVariable("tkmet_phi", lambda ev : ev.tkMet.phi(), help="TK E_{T}^{miss} dz<0.1 phi"),
+
+    NTupleVariable("tkmetchs_pt", lambda ev : ev.tkMetchs.pt(), help="TK E_{T}^{miss} fromPV>0 pt"),
+    NTupleVariable("tkmetchs_phi", lambda ev : ev.tkMetchs.phi(), help="TK E_{T}^{miss} fromPV>0 phi"),
+
+    NTupleVariable("tkmetPVLoose_pt", lambda ev : ev.tkMetPVLoose.pt(), help="TK E_{T}^{miss} fromPV>1 pt"),
+    NTupleVariable("tkmetPVLoose_phi", lambda ev : ev.tkMetPVLoose.phi(), help="TK E_{T}^{miss} fromPV>1 phi"),
+
+    NTupleVariable("tkmetPVTight_pt", lambda ev : ev.tkMetPVTight.pt(), help="TK E_{T}^{miss} fromPV>2 pt"),
+    NTupleVariable("tkmetPVTight_phi", lambda ev : ev.tkMetPVTight.phi(), help="TK E_{T}^{miss} fromPV>2 phi"),
 
     NTupleVariable("zll_pt", lambda ev : ev.zll_p4.Pt(), help="Pt of di-lepton system"),
     NTupleVariable("zll_eta", lambda ev : ev.zll_p4.Eta(), help="Eta of di-lepton system"),
