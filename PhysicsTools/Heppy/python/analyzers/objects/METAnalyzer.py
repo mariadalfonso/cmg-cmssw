@@ -24,6 +24,7 @@ class METAnalyzer( Analyzer ):
         super(METAnalyzer, self).declareHandles()
         self.handles['met'] = AutoHandle( 'slimmedMETs', 'std::vector<pat::MET>' )
         self.handles['nopumet'] = AutoHandle( 'slimmedMETs', 'std::vector<pat::MET>' )
+        self.handles['cmgCand'] = AutoHandle( self.cfg_ana.candidates, self.cfg_ana.candidatesTypes )
         self.handles['cmgCand1'] = AutoHandle( self.cfg_ana.candidates, self.cfg_ana.candidatesTypes )
         self.handles['cmgCand2'] = AutoHandle( self.cfg_ana.candidates, self.cfg_ana.candidatesTypes )
         self.handles['cmgCand3'] = AutoHandle( self.cfg_ana.candidates, self.cfg_ana.candidatesTypes )
@@ -44,18 +45,35 @@ class METAnalyzer( Analyzer ):
         event.tkMet = 0  
 
         charged = []
+        chargedchs = []
+        chargedPVLoose = []
+        chargedPVTight = []
+
         pfcands = self.handles['cmgCand'].product()
 
         for i in xrange(pfcands.size()):
 
 ## ===> require the Track Candidate charge and with a  minimum dz 
             
-            if (pfcands.at(i).charge()!=0 and (abs(pfcands.at(i).dz())<=self.cfg_ana.dzMax )):
-                
-                charged.append(pfcands.at(i))
-                
+            if (pfcands.at(i).charge()!=0):
+
+                if abs(pfcands.at(i).dz())<=self.cfg_ana.dzMax:
+                    charged.append(pfcands.at(i))
+
+                if pfcands.at(i).fromPV()>0:
+                    chargedchs.append(pfcands.at(i))
+
+                if pfcands.at(i).fromPV()>1:
+                    chargedPVLoose.append(pfcands.at(i))
+
+                if pfcands.at(i).fromPV()>2:
+                    chargedPVTight.append(pfcands.at(i))
+
         import ROOT
-        event.tkMet = ROOT.reco.Particle.LorentzVector(-1.*(sum([x.px() for x in charged])) , -1.*(sum([x.py() for x in charged])), 0, 0 )
+        event.tkMet = ROOT.reco.Particle.LorentzVector(-1.*(sum([x.px() for x in charged])) , -1.*(sum([x.py() for x in charged])), 0, math.hypot((sum([x.px() for x in charged])),(sum([x.py() for x in charged]))) )
+        event.tkMetchs = ROOT.reco.Particle.LorentzVector(-1.*(sum([x.px() for x in chargedchs])) , -1.*(sum([x.py() for x in chargedchs])), 0, math.hypot((sum([x.px() for x in chargedchs])),(sum([x.py() for x in chargedchs]))) )
+        event.tkMetPVLoose = ROOT.reco.Particle.LorentzVector(-1.*(sum([x.px() for x in chargedPVLoose])) , -1.*(sum([x.py() for x in chargedPVLoose])), 0, math.hypot((sum([x.px() for x in chargedPVLoose])),(sum([x.py() for x in chargedPVLoose]))) )
+        event.tkMetPVTight = ROOT.reco.Particle.LorentzVector(-1.*(sum([x.px() for x in chargedPVTight])) , -1.*(sum([x.py() for x in chargedPVTight])), 0, math.hypot((sum([x.px() for x in chargedPVTight])),(sum([x.py() for x in chargedPVTight]))) )
 ##        print 'tkmet',event.tkMet.pt(),'tkmetphi',event.tkMet.phi()
 
 
@@ -113,8 +131,18 @@ class METAnalyzer( Analyzer ):
         #event.met_sigm = event.met.getSignificanceMatrix()
 
         ###https://github.com/cms-sw/cmssw/blob/CMSSW_7_2_X/DataFormats/PatCandidates/interface/MET.h
-        event.metraw = event.met.shiftedPt(12, 0)
-        event.metType1chs = event.met.shiftedPt(12, 1)
+        #        event.metraw = event.met.shiftedPt(event.met.NoShift, event.met.Raw)
+        #        event.metType1chs = event.met.shiftedPt(event.met.NoShift, event.met.Type1)
+
+        event.metraw = copy.deepcopy(event.met)
+        event.metType1chs = copy.deepcopy(event.met)
+
+        rawpx,rawpy = event.met.shiftedPx(event.met.NoShift, event.met.Raw) , event.met.shiftedPy(event.met.NoShift, event.met.Raw)
+        event.metraw.setP4(ROOT.reco.Particle.LorentzVector(rawpx,rawpy, 0, math.hypot(rawpx,rawpy)))
+
+        chspx,chspy = event.met.shiftedPx(event.met.NoShift, event.met.Type1) , event.met.shiftedPy(event.met.NoShift, event.met.Type1)
+        event.metType1chs.setP4(ROOT.reco.Particle.LorentzVector(chspx,chspy, 0, math.hypot(chspx,chspy)))
+
 
         if self.cfg_ana.recalibrate and hasattr(event, 'deltaMetFromJetSmearing'):
             px,py = event.met.px()+event.deltaMetFromJetSmearing[0], event.met.py()+event.deltaMetFromJetSmearing[1]
@@ -138,7 +166,9 @@ class METAnalyzer( Analyzer ):
         self.counters.counter('events').inc('all events')
 
         self.makeMETs(event)
-        event.tkMet = 0 
+#        event.tkMet = 0 
+#        event.tkMetchs=0
+#        event.tkMetPVLoose=0
 
         if self.cfg_ana.doTkMet: 
             self.makeTkMETs(event);
