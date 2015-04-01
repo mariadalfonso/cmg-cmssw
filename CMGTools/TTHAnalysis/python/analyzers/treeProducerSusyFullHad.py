@@ -35,6 +35,7 @@ susyFullHad_globalVariables = susyCore_globalVariables + [
     # Physics object multplicities
     ##--------------------------------------------------
     NTupleVariable("nBJet40", lambda ev: sum([j.btagWP("CSVv2IVFM") for j in ev.cleanJets if j.pt() > 40]), int, help="Number of jets with pt > 40 passing CSV medium"),
+    NTupleVariable("nBJet25", lambda ev: sum([j.btagWP("CSVv2IVFM") for j in ev.cleanJets if j.pt() > 25]), int, help="Number of jets with pt > 25 passing CSV medium"),
     NTupleVariable("nMuons10", lambda ev: sum([l.pt() > 10 and abs(l.pdgId()) == 13 for l in ev.selectedLeptons]), int, help="Number of muons with pt > 10"),
     NTupleVariable("nElectrons10", lambda ev: sum([l.pt() > 10 and abs(l.pdgId()) == 11 for l in ev.selectedLeptons]), int, help="Number of electrons with pt > 10"),
     NTupleVariable("nTaus20", lambda ev: sum([l.pt() > 20 for l in ev.selectedTaus]), int, help="Number of taus with pt > 20"),
@@ -48,6 +49,7 @@ susyFullHad_globalVariables = susyCore_globalVariables + [
     NTupleVariable("minMTBMet", lambda ev: ev.minMTBMet, float, help="min Mt(b,met)"),
     NTupleVariable("nPFLep5LowMT", lambda ev: ev.nPFLep5LowMT, int, help="number of PF leptons (e,mu) with pt > 5, reliso < 0.2, MT < 100 "),
     NTupleVariable("nPFHad10LowMT", lambda ev: ev.nPFHad10LowMT, int, help="number of PF hadrons with pt > 10, reliso < 0.1, MT < 100 "),
+    NTupleVariable("nLepLowMT", lambda ev: ev.nLepLowMT, int, help="number of leptons (POGID and isoTrack ) with MT < 100 "),
     ##--------------------------------------------------
     # MT2
     ##--------------------------------------------------
@@ -71,6 +73,7 @@ susyFullHad_globalVariables = susyCore_globalVariables + [
     ##--------------------------------------------------
     NTupleVariable("gamma_nJet40", lambda ev: sum([j.pt() > 40 for j in ev.gamma_cleanJets]), int, help="Number of jets after photon-cleaning with pt > 40, |eta|<2.4"),
     NTupleVariable("gamma_nBJet40", lambda ev: sum([j.btagWP("CSVv2IVFM") for j in ev.gamma_cleanJets if j.pt() > 40]), int, help="Number jets after photon-cleaning  with pt > 40 passing CSV medium"),
+    NTupleVariable("gamma_nBJet25", lambda ev: sum([j.btagWP("CSVv2IVFM") for j in ev.gamma_cleanJets if j.pt() > 25]), int, help="Number jets after photon-cleaning  with pt > 25 passing CSV medium"),
     NTupleVariable("gamma_ht", lambda ev : ev.gamma_htJet40j, help="H_{T} computed from only jets (with |eta|<2.5, pt > 40 GeV)"),
     NTupleVariable("gamma_deltaPhiMin", lambda ev : ev.gamma_deltaPhiMin_had, help="minimal deltaPhi between the MET and the four leading jets with pt>40 and eta<2.4"),
     NTupleVariable("gamma_diffMetMht", lambda ev : ev.gamma_diffMetMht_had, help="abs( vec(mht) - vec(met) )"),
@@ -115,8 +118,8 @@ susyFullHad_globalObjects.update({
             "gamma_met" : NTupleObject("gamma_met", fourVectorType, help="PF E_{T}^{miss}, plus photon, after type 1 corrections"),
             "gamma_metNoPU" : NTupleObject("gamma_metNoPU", fourVectorType, help="PF noPU E_{T}^{miss}, plus photon"),
             #
-            "gamma_pseudoJet1"       : NTupleObject("gamma_pseudoJet1",     fourVectorType, help="pseudoJet1 for hemishphere, with photon addition"),
-            "gamma_pseudoJet2"       : NTupleObject("gamma_pseudoJet2",     fourVectorType, help="pseudoJet2 for hemishphere, with photon addition"),
+#            "gamma_pseudoJet1"       : NTupleObject("gamma_pseudoJet1",     fourVectorType, help="pseudoJet1 for hemishphere, with photon addition"),
+#            "gamma_pseudoJet2"       : NTupleObject("gamma_pseudoJet2",     fourVectorType, help="pseudoJet2 for hemishphere, with photon addition"),
             ###
 })
 
