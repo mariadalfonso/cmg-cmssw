@@ -19,17 +19,23 @@ vertexAna.keepFailingEvents = True # keep events with no good vertices
 lepAna.loose_muon_dxy = 0.5
 lepAna.loose_muon_dz  = 1.0
 lepAna.loose_muon_relIso  = 0.15
-lepAna.loose_electron_id  = "POG_Cuts_ID_2012_Veto"
 lepAna.loose_electron_pt  = 5
 lepAna.loose_electron_eta    = 2.4
-lepAna.loose_electron_dxy    = 0.04
-lepAna.loose_electron_dz     = 0.2
 lepAna.loose_electron_relIso = 0.15
-lepAna.loose_electron_lostHits = 999 # no cut
-lepAna.inclusive_electron_lostHits = 999 # no cut
+
+lepAna.loose_electron_id  = "POG_Cuts_ID_PHYS14_25ns_v1_ConvVeto_Veto_full5x5"
+lepAna.loose_electron_lostHits = 999. # no cut
+lepAna.loose_electron_dxy    = 999.
+lepAna.loose_electron_dz     = 999.
+
+lepAna.inclusive_electron_id  = "POG_Cuts_ID_PHYS14_25ns_v1_ConvVeto_Veto_full5x5"
+lepAna.inclusive_electron_lostHits = 999. # no cut since embedded in ID
+lepAna.inclusive_electron_dxy    = 999. # no cut since embedded in ID
+lepAna.inclusive_electron_dz     = 999. # no cut since embedded in ID
+
 lepAna.mu_isoCorr = "deltaBeta"
 lepAna.ele_isoCorr = "deltaBeta"
-lepAna.ele_tightId = "Cuts_2012"
+lepAna.ele_tightId = "PHYS14"
 lepAna.notCleaningElectrons = True
 
 # JET (for event variables do apply the jetID and not PUID yet)
@@ -175,7 +181,7 @@ from PhysicsTools.HeppyCore.framework.heppy import getHeppyOption
 
 #-------- HOW TO RUN
 # choose 2 for full production
-test = 0
+test = 1
 if test==0:
     # ------------------------------------------------------------------------------------------- #
     # --- all this lines taken from CMGTools.TTHAnalysis.samples.samples_13TeV_PHYS14 
@@ -214,6 +220,7 @@ elif test==1:
 
     selectedComponents = [comp]
     comp.splitFactor = 1
+#    comp.fineSplitFactor = 100
 
 elif test==2:
     from CMGTools.TTHAnalysis.samples.samples_13TeV_PHYS14 import *
