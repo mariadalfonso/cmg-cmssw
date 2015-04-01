@@ -19,9 +19,12 @@ vertexAna.keepFailingEvents = True # keep events with no good vertices
 lepAna.loose_muon_dxy = 0.5
 lepAna.loose_muon_dz  = 1.0
 lepAna.loose_muon_relIso  = 0.15
+lepAna.loose_muon_minRelIso  = 0.2
+
 lepAna.loose_electron_pt  = 5
 lepAna.loose_electron_eta    = 2.4
 lepAna.loose_electron_relIso = 0.15
+lepAna.loose_electron_minRelIso  = 0.1
 
 lepAna.loose_electron_id  = "POG_Cuts_ID_PHYS14_25ns_v1_ConvVeto_Veto_full5x5"
 lepAna.loose_electron_lostHits = 999. # no cut
@@ -37,6 +40,9 @@ lepAna.mu_isoCorr = "deltaBeta"
 lepAna.ele_isoCorr = "deltaBeta"
 lepAna.ele_tightId = "PHYS14"
 lepAna.notCleaningElectrons = True
+lepAna.doMiniIsolation = True
+lepAna.miniIsolationPUCorr = 'raw'
+lepAna.useMiniIsolation = True
 
 # JET (for event variables do apply the jetID and not PUID yet)
 jetAna.relaxJetId = False
@@ -212,11 +218,11 @@ if test==0:
 elif test==1:
 
     from CMGTools.TTHAnalysis.samples.samples_13TeV_PHYS14 import *
-    comp=GJets_HT200to400
-    comp.files = ['/afs/cern.ch/user/d/dalfonso/public/TESTfilesPHY14/gjets_ht200to400_miniaodsim_fix.root']
+#    comp=GJets_HT200to400
+#    comp.files = ['/afs/cern.ch/user/d/dalfonso/public/TESTfilesPHY14/gjets_ht200to400_miniaodsim_fix.root']
 
-#    comp=TTJets
-#    comp.files = ['/afs/cern.ch/user/d/dalfonso/public/TESTfilesPHY14/TTJets_miniAOD_fixPhoton_forSynch.root']
+    comp=TTJets
+    comp.files = ['/afs/cern.ch/user/d/dalfonso/public/TESTfilesPHY14/TTJets_miniAOD_fixPhoton_forSynch.root']
 
     selectedComponents = [comp]
     comp.splitFactor = 1
