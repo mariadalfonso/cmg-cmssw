@@ -117,6 +117,19 @@ RelValZMM_50ns_7_4_0_pre9 = cfg.DataComponent(
 
 relValMC = [ RelValZMM_25ns_7_3_1_patch1, RelValZMM_25ns_7_3_3, RelValZMM_25ns_7_4_0_pre9, RelValZMM_50ns_7_3_1_patch1, RelValZMM_50ns_7_3_3, RelValZMM_50ns_7_4_0_pre9 ]
 
+
+#------  PRIVATE reco
+
+MVAegamma_OFF_25ns = kreator.makeMCComponentFromEOS('MVAegamma_OFF_25ns','RelValZMM_13_CMSSW_7_4_0_pre9-PU25ns_MCRUN2_74_V7-v1_MVA_OFF_mAOD','/store/group/phys_jetmet/schoef/740pre9_relVal_rereco/%s',".*root",1.)
+
+MVAegamma_ON_25ns = kreator.makeMCComponentFromEOS('MVAegamma_ON_25ns','RelValZMM_13_CMSSW_7_4_0_pre9-PU25ns_MCRUN2_74_V7-v1_MVA_ON_mAOD','/store/group/phys_jetmet/schoef/740pre9_relVal_rereco/%s',".*root",1.)
+
+MVAegamma_OFF_50ns = kreator.makeMCComponentFromEOS('MVAegamma_OFF_50ns','RelValZMM_13_CMSSW_7_4_0_pre9-PU50ns_MCRUN2_74_V6-v1_MVA_OFF_mAOD','/store/group/phys_jetmet/schoef/740pre9_relVal_rereco/%s',".*root",1.)
+
+MVAegamma_ON_50ns = kreator.makeMCComponentFromEOS('MVAegamma_ON_50ns','RelValZMM_13_CMSSW_7_4_0_pre9-PU50ns_MCRUN2_74_V6-v1_MVA_ON_mAOD','/store/group/phys_jetmet/schoef/740pre9_relVal_rereco/%s',".*root",1.)
+
+MVAegammaMC = [ MVAegamma_OFF_25ns, MVAegamma_ON_25ns, MVAegamma_OFF_50ns, MVAegamma_ON_50ns ]
+
 #-----------DATA---------------
 
 for comp in dataSamplesAll:
@@ -134,6 +147,12 @@ for comp in data2011All:
 #    comp.isData = True
 
 for comp in relValMC:
+    comp.splitFactor = 1
+    comp.triggers = []
+    comp.isMC = True
+    comp.isData = False
+
+for comp in MVAegammaMC:
     comp.splitFactor = 1
     comp.triggers = []
     comp.isMC = True
