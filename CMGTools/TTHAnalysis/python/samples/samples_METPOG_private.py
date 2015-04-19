@@ -130,6 +130,16 @@ MVAegamma_ON_50ns = kreator.makeMCComponentFromEOS('MVAegamma_ON_50ns','RelValZM
 
 MVAegammaMC = [ MVAegamma_OFF_25ns, MVAegamma_ON_25ns, MVAegamma_OFF_50ns, MVAegamma_ON_50ns ]
 
+
+#------  PRIVATE reco - DATA Matthieu's fix
+
+DoubleMuParked_1Apr_RelVal_dm2012D_v2_newPFHCalib = kreator.makeMCComponentFromEOS('DoubleMuParked_1Apr_RelVal_dm2012D_v2_newPFHCalib','DoubleMuParked_CMSSW_7_4_0_pre9_ROOT6-GR_R_74_V8_1Apr_RelVal_dm2012D-v2_newCalib_mAOD/','/store/group/phys_jetmet/schoef/740pre9_data_rereco/%s',".*root",1.)   
+
+DoubleMuParked_1Apr_RelVal_dm2012D_v2_oldPFHCalib = kreator.makeMCComponentFromEOS('DoubleMuParked_1Apr_RelVal_dm2012D_v2_oldPFHCalib','DoubleMuParked_CMSSW_7_4_0_pre9_ROOT6-GR_R_74_V8_1Apr_RelVal_dm2012D-v2_oldCalib_mAOD/','/store/group/phys_jetmet/schoef/740pre9_data_rereco/%s',".*root",1.)   
+
+HCALcalibDATA = [ DoubleMuParked_1Apr_RelVal_dm2012D_v2_newPFHCalib , DoubleMuParked_1Apr_RelVal_dm2012D_v2_oldPFHCalib ]
+
+
 #-----------DATA---------------
 
 for comp in dataSamplesAll:
@@ -145,6 +155,14 @@ for comp in data2011All:
     comp.json = dataDir+'/json/Cert_160404-180252_7TeV_ReRecoNov08_Collisions11.json'
 #    comp.isMC = False
 #    comp.isData = True
+
+for comp in HCALcalibDATA:
+    comp.isMC = False
+    comp.isData = True
+    comp.splitFactor = 1
+    comp.triggers = []
+    comp.intLumi = 1
+    comp.json = dataDir+'/json/diMu_740pre9_miniAOD.json'
 
 for comp in relValMC:
     comp.splitFactor = 1
