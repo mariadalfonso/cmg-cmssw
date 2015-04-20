@@ -137,7 +137,11 @@ DoubleMuParked_1Apr_RelVal_dm2012D_v2_newPFHCalib = kreator.makeMCComponentFromE
 
 DoubleMuParked_1Apr_RelVal_dm2012D_v2_oldPFHCalib = kreator.makeMCComponentFromEOS('DoubleMuParked_1Apr_RelVal_dm2012D_v2_oldPFHCalib','DoubleMuParked_CMSSW_7_4_0_pre9_ROOT6-GR_R_74_V8_1Apr_RelVal_dm2012D-v2_oldCalib_mAOD/','/store/group/phys_jetmet/schoef/740pre9_data_rereco/%s',".*root",1.)   
 
-HCALcalibDATA = [ DoubleMuParked_1Apr_RelVal_dm2012D_v2_newPFHCalib , DoubleMuParked_1Apr_RelVal_dm2012D_v2_oldPFHCalib ]
+JetHT_GR_R_74_V8_1Apr_v1_newPFHCalib = kreator.makeMCComponentFromEOS('JetHT_GR_R_74_V8_1Apr_v1_newPFHCalib','JetHT_CMSSW_7_4_0_pre9_ROOT6-GR_R_74_V8_1Apr_RelVal_jht2012D-v1_newCalib_mAOD/','/store/group/phys_jetmet/schoef/740pre9_data_rereco/%s',".*root",1.)
+
+JetHT_GR_R_74_V8_1Apr_v1_oldPFHCalib = kreator.makeMCComponentFromEOS('JetHT_GR_R_74_V8_1Apr_v1_oldPFHCalib','JetHT_CMSSW_7_4_0_pre9_ROOT6-GR_R_74_V8_1Apr_RelVal_jht2012D-v1_oldCalib_mAOD/','/store/group/phys_jetmet/schoef/740pre9_data_rereco/%s',".*root",1.)
+
+HCALcalibDATA = [ DoubleMuParked_1Apr_RelVal_dm2012D_v2_newPFHCalib , DoubleMuParked_1Apr_RelVal_dm2012D_v2_oldPFHCalib , JetHT_GR_R_74_V8_1Apr_v1_newPFHCalib , JetHT_GR_R_74_V8_1Apr_v1_oldPFHCalib ]
 
 
 #-----------DATA---------------
