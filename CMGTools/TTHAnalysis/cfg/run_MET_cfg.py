@@ -264,8 +264,6 @@ metSequence = [
     vertexAna,
 ##### lepton modules below
     lepAna,
-    ttHLepSkim,
-    ttHZskim,
 ##### met modules below
     metAna,
     eventFlagsAna,
@@ -273,6 +271,11 @@ metSequence = [
     treeProducer,
 ]
 
+# -------------------- lepton modules below needed for the DoubleMuon
+#metSequence.insert(metSequence.index(lepAna),
+#                   ttHLepSkim)
+#metSequence.insert(metSequence.index(lepAna)+1,
+#                   ttHZskim)
 
 ###---- to switch off the comptrssion
 #treeProducer.isCompressed = 0
@@ -287,7 +290,7 @@ selectedComponents = [JetHT_HcalExtValid_jet2012D_v1, JetHT_HcalExtValid_jet2012
 
 #-------- HOW TO RUN
 
-test = 4
+test = 9
 
    # -----------------------PHYS14 options -------------------------------------------------------------------- #
 
@@ -320,7 +323,7 @@ elif test==3:
     selectedComponents = [DoubleMuparked_HcalExtValid_zMu2012D_v1]
     comp=DoubleMuparked_HcalExtValid_zMu2012D_v1
     comp.files = comp.files[:1]
-    comp.triggers = triggers_8TeV_mumu 
+    comp.triggers = triggers_8TeV_mumu
     comp.json = dataDir+'/json/diMu_732overlap_miniAOD.json'
     selectedComponents = [comp]
     comp.splitFactor = 1
@@ -330,11 +333,11 @@ elif test==4:
 ##    selectedComponents = [ DYJetsToLL_M50_PU4bx50,DYJetsToLL_M50 ]
     selectedComponents = [DoubleMuparked_HcalExtValid_zMu2012D_v1]
     for comp in selectedComponents:
-        comp.splitFactor = 500
-        comp.fineSplitFactor = 100
+        comp.splitFactor = 250
+        comp.fineSplitFactor = 10
 #        comp.splitFactor = 1
         comp.files = comp.files[:]
-        comp.triggers = triggers_8TeV_mumu 
+        comp.triggers = triggers_8TeV_mumu
         comp.json = dataDir+'/json/diMu_732overlap_miniAOD.json'
         #comp.files = comp.files[:1]
 
@@ -346,7 +349,7 @@ elif test==5:
     selectedComponents = [DoubleMuparked_1Apr_RelVal_dm2012D_v2]
     comp=DoubleMuparked_1Apr_RelVal_dm2012D_v2
     comp.files = comp.files[:1]
-    comp.triggers = triggers_8TeV_mumu 
+    comp.triggers = triggers_8TeV_mumu
     comp.json = dataDir+'/json/diMu_740pre9_miniAOD.json'
     selectedComponents = [comp]
     comp.splitFactor = 1
@@ -359,9 +362,43 @@ elif test==6:
 #        comp.splitFactor = 251
         comp.splitFactor = 1
         comp.files = comp.files[:]
-        comp.triggers = triggers_8TeV_mumu 
+        comp.triggers = triggers_8TeV_mumu
         comp.json = dataDir+'/json/diMu_740pre9_miniAOD.json'
         #comp.files = comp.files[:1]
+
+    # ----------------------relVal --------------------------------------------------------------------- #
+
+elif test==7:
+#    selectedComponents = [ DoubleMu_zMu2011A_CMSSW_7_0_6 , DoubleMu_zMu2011A_CMSSW_7_3_0, DoubleMu_zMu2011A_CMSSW_7_3_1_patch1, DoubleMu_zMu2011A_CMSSW_7_3_3, DoubleMu_zMu2011A_7_4_0_pre9 ]
+    selectedComponents = [ DoubleMu_zMu2011A_CMSSW_7_3_0 ]
+    for comp in selectedComponents:
+        comp.splitFactor = 1
+        comp.files = comp.files[:]
+#        comp.triggers = triggers_8TeV_mumu
+#        comp.json = dataDir+'/json/diMu_740pre9_miniAOD.json'
+
+    # ---------------------- PF (hadron and egamma) calibration studies --------------------------------------------------------------------- #
+
+elif test==8:
+#    selectedComponents = [ RelValZMM_25ns_7_3_1_patch1, RelValZMM_25ns_7_3_3, RelValZMM_25ns_7_4_0_pre9, RelValZMM_50ns_7_3_1_patch1, RelValZMM_50ns_7_3_3, RelValZMM_50ns_7_4_0_pre9 ]
+#    selectedComponents = [ RelValZMM_25ns_7_4_0_pre9, RelValZMM_50ns_7_4_0_pre9 ]
+#    selectedComponents = MVAegammaMC
+    selectedComponents = [ DoubleMuParked_1Apr_RelVal_dm2012D_v2_newPFHCalib , DoubleMuParked_1Apr_RelVal_dm2012D_v2_oldPFHCalib , DoubleMuparked_1Apr_RelVal_dm2012D_v2 ]
+
+    for comp in selectedComponents:
+        comp.splitFactor = 1
+        comp.files = comp.files[:]
+        comp.triggers = triggers_8TeV_mumu
+
+elif test==9:
+    selectedComponents = [ JetHT_GR_R_74_V8_1Apr_v1_oldPFHCalib , JetHT_GR_R_74_V8_1Apr_v1_newPFHCalib ]
+    for comp in selectedComponents:
+#        comp.splitFactor = 1
+        comp.splitFactor = 250
+        comp.files = comp.files[:]
+
+    # ------------------------------------------------------------------------------------------- #
+
 
 from PhysicsTools.HeppyCore.framework.services.tfile import TFileService 
 output_service = cfg.Service(
@@ -387,8 +424,8 @@ if getHeppyOption("nofetch"):
 config = cfg.Config( components = selectedComponents,
                      sequence = metSequence,
                      services = [output_service],
-                     events_class = event_class)
-#                     events_class = Events)
+#                     events_class = event_class)
+                     events_class = Events)
 
 #printComps(config.components, True)
         
