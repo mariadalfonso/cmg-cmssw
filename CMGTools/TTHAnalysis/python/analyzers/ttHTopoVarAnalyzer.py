@@ -76,47 +76,39 @@ class ttHTopoVarAnalyzer( Analyzer ):
 
         return davismt2.get_mt2()
 
-
-    def makeMT2(self, event):
+    def getMT2AKT(self, event, TMPobjects40jc, met , postFix):
 #        print '==> INSIDE THE PRINT MT2'
-#        print 'MET=',event.met.pt() 
+#        print 'MET=',event.met.pt()
 
-        import array
-        import numpy
-
-
-## ===> hadronic MT2 (as used in the SUS-13-019) 
-
-        objects40jc = [ j for j in event.cleanJets if j.pt() > 40 and abs(j.eta())<2.5 ]
-
-
-#### get hemispheres via AntiKT -1 antikt, 1 kt, 0 CA                                                                                                                                    
-        if len(objects40jc)>=2:
+#### get hemispheres via AntiKT -1 antikt, 1 kt, 0 CA
+        if len(TMPobjects40jc)>=2:
 
             objects  = ROOT.std.vector(ROOT.reco.Particle.LorentzVector)()
-            for jet in objects40jc:
+            for jet in TMPobjects40jc:
                 objects.push_back(jet.p4())
 
             hemisphereViaKt = ReclusterJets(objects, 1.,50.0)
             groupingViaKt=hemisphereViaKt.getGroupingExclusive(2)
 
             if len(groupingViaKt)>=2:
-                event.pseudoViaKtJet1_had = ROOT.reco.Particle.LorentzVector(groupingViaKt[0])
-                event.pseudoViaKtJet2_had = ROOT.reco.Particle.LorentzVector(groupingViaKt[1])
-                event.mt2ViaKt_had = self.computeMT2(event.pseudoViaKtJet1_had, event.pseudoViaKtJet2_had, event.met)
+                setattr(event, "pseudoViaKtJet1"+postFix, ROOT.reco.Particle.LorentzVector(groupingViaKt[0]) )
+                setattr(event, "pseudoViaKtJet2"+postFix, ROOT.reco.Particle.LorentzVector(groupingViaKt[1]) )
+                return self.computeMT2(getattr(event,'pseudoViaKtJet1'+postFix), getattr(event,'pseudoViaKtJet2'+postFix), met)
 
             if not self.cfg_ana.doOnlyDefault:
                 hemisphereViaAKt = ReclusterJets(objects, -1.,50.0)
                 groupingViaAKt=hemisphereViaAKt.getGroupingExclusive(2)
 
                 if len(groupingViaAKt)>=2:
-                    event.pseudoViaKtJet1_had = ROOT.reco.Particle.LorentzVector(groupingViaAKt[0])
-                    event.pseudoViaKtJet2_had = ROOT.reco.Particle.LorentzVector(groupingViaAKt[1])
-                    event.mt2ViaAKt_had = self.computeMT2(event.pseudoViaAKtJet1_had, event.pseudoViaAKtJet2_had, event.met)
+                    setattr(event, "pseudoViaAKtJet1"+postFix, ROOT.reco.Particle.LorentzVector(groupingViaAKt[0]) )
+                    setattr(event, "pseudoViaAKtJet2"+postFix, ROOT.reco.Particle.LorentzVector(groupingViaAKt[1]) )
+                    setattr(event, "mt2ViaAKt"+postFix, self.computeMT2(getattr(event,'pseudoViaAKtJet1'+postFix), getattr(event,'pseudoViaAKtJet2'+postFix), met) )
 
-#### get hemispheres (seed 2: max inv mass, association method: default 3 = minimal lund distance)
+    def getMT2Hemi(self, event, TMPobjects40jc, met, postFix):
+#        print '==> INSIDE THE PRINT MT2'
+#        print 'MET=',event.met.pt()
 
-        if len(objects40jc)>=2:
+        if len(TMPobjects40jc)>=2:
 
             pxvec  = ROOT.std.vector(float)()
             pyvec  = ROOT.std.vector(float)()
@@ -124,7 +116,7 @@ class ttHTopoVarAnalyzer( Analyzer ):
             Evec  = ROOT.std.vector(float)()
             grouping  = ROOT.std.vector(int)()
             
-            for jet in objects40jc:
+            for jet in TMPobjects40jc:
                 pxvec.push_back(jet.px())
                 pyvec.push_back(jet.py())
                 pzvec.push_back(jet.pz())
@@ -164,17 +156,42 @@ class ttHTopoVarAnalyzer( Analyzer ):
             pseudoJet2pt2 = pseudoJet2px*pseudoJet2px + pseudoJet2py*pseudoJet2py
 
             if pseudoJet1pt2 >= pseudoJet2pt2:
-                event.pseudoJet1_had = ROOT.reco.Particle.LorentzVector( pseudoJet1px, pseudoJet1py, pseudoJet1pz, pseudoJet1energy)
-                event.pseudoJet2_had = ROOT.reco.Particle.LorentzVector( pseudoJet2px, pseudoJet2py, pseudoJet2pz, pseudoJet2energy)
-                event.multPseudoJet1_had = multPSJ1
-                event.multPseudoJet2_had = multPSJ2
+                setattr(event, "pseudoJet1"+postFix, ROOT.reco.Particle.LorentzVector( pseudoJet1px, pseudoJet1py, pseudoJet1pz, pseudoJet1energy ))
+                setattr(event, "pseudoJet2"+postFix, ROOT.reco.Particle.LorentzVector( pseudoJet2px, pseudoJet2py, pseudoJet2pz, pseudoJet2energy ))
+                setattr(event, "multPseudoJet1"+postFix, multPSJ1 )
+                setattr(event, "multPseudoJet2"+postFix, multPSJ2 )
             else:
-                event.pseudoJet2_had = ROOT.reco.Particle.LorentzVector( pseudoJet1px, pseudoJet1py, pseudoJet1pz, pseudoJet1energy)
-                event.pseudoJet1_had = ROOT.reco.Particle.LorentzVector( pseudoJet2px, pseudoJet2py, pseudoJet2pz, pseudoJet2energy)
-                event.multPseudoJet1_had = multPSJ2
-                event.multPseudoJet2_had = multPSJ1
+                setattr(event, "pseudoJet2"+postFix, ROOT.reco.Particle.LorentzVector( pseudoJet1px, pseudoJet1py, pseudoJet1pz, pseudoJet1energy ))
+                setattr(event, "pseudoJet1"+postFix, ROOT.reco.Particle.LorentzVector( pseudoJet2px, pseudoJet2py, pseudoJet2pz, pseudoJet2energy ))
+                setattr(event, "multPseudoJet1"+postFix, multPSJ2 )
+                setattr(event, "multPseudoJet2"+postFix, multPSJ1 )
 
-            event.mt2_had = self.computeMT2(event.pseudoJet1_had, event.pseudoJet2_had, event.met)
+            return self.computeMT2(getattr(event,'pseudoJet1'+postFix), getattr(event,'pseudoJet2'+postFix), met)
+
+
+    def makeMT2(self, event):
+#        print '==> INSIDE THE PRINT MT2'
+#        print 'MET=',event.met.pt()
+
+        import array
+        import numpy
+
+
+## ===> hadronic MT2 (as used in the SUS-13-019)
+
+        objects40jc = [ j for j in event.cleanJets if j.pt() > 40 and abs(j.eta())<2.5 ]
+
+
+#### get hemispheres via AntiKT -1 antikt, 1 kt, 0 CA
+        if len(objects40jc)>=2:
+
+            event.mt2ViaKt_had=self.getMT2AKT(event, objects40jc, event.met, "_had")
+
+#### get hemispheres (seed 2: max inv mass, association method: default 3 = minimal lund distance)
+
+        if len(objects40jc)>=2:
+
+            event.mt2_had = self.getMT2Hemi(event,objects40jc, event.met, "_had")
 
 #### do same things for GEN
 
@@ -183,50 +200,7 @@ class ttHTopoVarAnalyzer( Analyzer ):
             objects40jc_Gen = [ j for j in allGenJets if j.pt() > 40 and abs(j.eta())<2.5 ]
      
             if len(objects40jc_Gen)>=2:
-     
-                pxvec  = ROOT.std.vector(float)()
-                pyvec  = ROOT.std.vector(float)()
-                pzvec  = ROOT.std.vector(float)()
-                Evec  = ROOT.std.vector(float)()
-                grouping  = ROOT.std.vector(int)()
-                
-                for jet in objects40jc_Gen:
-                    pxvec.push_back(jet.px())
-                    pyvec.push_back(jet.py())
-                    pzvec.push_back(jet.pz())
-                    Evec.push_back(jet.energy())
-     
-                #### get hemispheres (seed 2: max inv mass, association method: default 3 = minimal lund distance)
-                hemisphere = Hemisphere(pxvec, pyvec, pzvec, Evec, 2, 3)
-                grouping=hemisphere.getGrouping()
-     #            print 'grouping ',len(grouping)
-     
-                pseudoJet1px = 0 
-                pseudoJet1py = 0 
-                pseudoJet1pz = 0
-                pseudoJet1energy = 0 
-     
-                pseudoJet2px = 0 
-                pseudoJet2py = 0 
-                pseudoJet2pz = 0
-                pseudoJet2energy = 0 
-                    
-                for index in range(0, len(pxvec)):
-                    if(grouping[index]==1):
-                        pseudoJet1px += pxvec[index]
-                        pseudoJet1py += pyvec[index]
-                        pseudoJet1pz += pzvec[index]
-                        pseudoJet1energy += Evec[index]
-                    if(grouping[index]==2):
-                        pseudoJet2px += pxvec[index]
-                        pseudoJet2py += pyvec[index]
-                        pseudoJet2pz += pzvec[index]
-                        pseudoJet2energy += Evec[index]                    
-     
-                pseudoGenJet1 = ROOT.reco.Particle.LorentzVector( pseudoJet1px, pseudoJet1py, pseudoJet1pz, pseudoJet1energy)
-                pseudoGenJet2 = ROOT.reco.Particle.LorentzVector( pseudoJet2px, pseudoJet2py, pseudoJet2pz, pseudoJet2energy)
-     
-                event.mt2_gen = self.computeMT2(pseudoGenJet1, pseudoGenJet2, event.met.genMET())
+                event.mt2_gen = self.getMT2Hemi(event,objects40jc_Gen, event.met.genMET(), "_gen")
         else:
             event.mt2_gen = -999.
 
@@ -242,63 +216,7 @@ class ttHTopoVarAnalyzer( Analyzer ):
 
         if len(objects40j10lc)>=2:
 
-            pxvec  = ROOT.std.vector(float)()
-            pyvec  = ROOT.std.vector(float)()
-            pzvec  = ROOT.std.vector(float)()
-            Evec  = ROOT.std.vector(float)()
-            grouping  = ROOT.std.vector(int)()
-
-            for obj in objects40j10lc:
-                pxvec.push_back(obj.px())
-                pyvec.push_back(obj.py())
-                pzvec.push_back(obj.pz())
-                Evec.push_back(obj.energy())
-
-            #for obj in objects_fullmt2:
-            #    print "pt: ", obj.pt(), ", eta: ", obj.eta(), ", phi: ", obj.phi(), ", mass: ", obj.mass()
-
-            #### get hemispheres (seed 2: max inv mass, association method: default 3 = minimal lund distance)
-
-            hemisphere = Hemisphere(pxvec, pyvec, pzvec, Evec, 2, 3)
-            grouping=hemisphere.getGrouping()
-##            print 'grouping ',len(grouping)
-
-            pseudoJet1px = 0
-            pseudoJet1py = 0
-            pseudoJet1pz = 0
-            pseudoJet1energy = 0
-
-            pseudoJet2px = 0
-            pseudoJet2py = 0
-            pseudoJet2pz = 0
-            pseudoJet2energy = 0
-
-            for index in range(0, len(pxvec)):
-                if(grouping[index]==1):
-                    pseudoJet1px += pxvec[index]
-                    pseudoJet1py += pyvec[index]
-                    pseudoJet1pz += pzvec[index]
-                    pseudoJet1energy += Evec[index]
-                if(grouping[index]==2):
-                    pseudoJet2px += pxvec[index]
-                    pseudoJet2py += pyvec[index]
-                    pseudoJet2pz += pzvec[index]
-                    pseudoJet2energy += Evec[index]
-
-            pseudoJet1pt2 = pseudoJet1px*pseudoJet1px + pseudoJet1py*pseudoJet1py
-            pseudoJet2pt2 = pseudoJet2px*pseudoJet2px + pseudoJet2py*pseudoJet2py
-
-            if pseudoJet1pt2 >= pseudoJet2pt2:
-                event.pseudoJet1 = ROOT.reco.Particle.LorentzVector( pseudoJet1px, pseudoJet1py, pseudoJet1pz, pseudoJet1energy)
-                event.pseudoJet2 = ROOT.reco.Particle.LorentzVector( pseudoJet2px, pseudoJet2py, pseudoJet2pz, pseudoJet2energy)
-            else:
-                event.pseudoJet2 = ROOT.reco.Particle.LorentzVector( pseudoJet1px, pseudoJet1py, pseudoJet1pz, pseudoJet1energy)
-                event.pseudoJet1 = ROOT.reco.Particle.LorentzVector( pseudoJet2px, pseudoJet2py, pseudoJet2pz, pseudoJet2energy)
-
-            ###
-
-            event.mt2 = self.computeMT2(event.pseudoJet1, event.pseudoJet2, event.met)
-
+            event.mt2 = self.getMT2Hemi(event,objects40j10lc,event.met,"") # no postfit since this is the nominal MT2
 
 ## ===> full gamma_MT2
 
@@ -311,51 +229,8 @@ class ttHTopoVarAnalyzer( Analyzer ):
 ##        if len(gamma_objects40j10lc)>=2:
         if len(gamma_objects40jc)>=2:
 
-            pxvec  = ROOT.std.vector(float)()
-            pyvec  = ROOT.std.vector(float)()
-            pzvec  = ROOT.std.vector(float)()
-            Evec  = ROOT.std.vector(float)()
-            grouping  = ROOT.std.vector(int)()
+            event.gamma_mt2 = self.getMT2Hemi(event,gamma_objects40jc,event.gamma_met,"_gamma")
 
-##            for obj in objects40j10lc:
-            for obj in gamma_objects40jc:
-                pxvec.push_back(obj.px())
-                pyvec.push_back(obj.py())
-                pzvec.push_back(obj.pz())
-                Evec.push_back(obj.energy())
-
-            #### get hemispheres (seed 2: max inv mass, association method: default 3 = minimal lund distance)
-
-            hemisphere = Hemisphere(pxvec, pyvec, pzvec, Evec, 2, 3)
-            grouping=hemisphere.getGrouping()
-##            print 'grouping ',len(grouping)
-
-            pseudoJet1px = 0
-            pseudoJet1py = 0
-            pseudoJet1pz = 0
-            pseudoJet1energy = 0
-
-            pseudoJet2px = 0
-            pseudoJet2py = 0
-            pseudoJet2pz = 0
-            pseudoJet2energy = 0
-
-            for index in range(0, len(pxvec)):
-                if(grouping[index]==1):
-                    pseudoJet1px += pxvec[index]
-                    pseudoJet1py += pyvec[index]
-                    pseudoJet1pz += pzvec[index]
-                    pseudoJet1energy += Evec[index]
-                if(grouping[index]==2):
-                    pseudoJet2px += pxvec[index]
-                    pseudoJet2py += pyvec[index]
-                    pseudoJet2pz += pzvec[index]
-                    pseudoJet2energy += Evec[index]
-
-            event.gamma_pseudoJet1 = ROOT.reco.Particle.LorentzVector( pseudoJet1px, pseudoJet1py, pseudoJet1pz, pseudoJet1energy)
-            event.gamma_pseudoJet2 = ROOT.reco.Particle.LorentzVector( pseudoJet2px, pseudoJet2py, pseudoJet2pz, pseudoJet2energy)
-
-            event.gamma_mt2 = self.computeMT2(event.gamma_pseudoJet1, event.gamma_pseudoJet2, event.gamma_met)
 
 ## ===> zll_MT2
         
@@ -363,50 +238,7 @@ class ttHTopoVarAnalyzer( Analyzer ):
            
         if len(csLeptons)==2 and len(objects40jc)>=2:
 
-            pxvec  = ROOT.std.vector(float)()
-            pyvec  = ROOT.std.vector(float)()
-            pzvec  = ROOT.std.vector(float)()
-            Evec  = ROOT.std.vector(float)()
-            grouping  = ROOT.std.vector(int)()
-
-            for obj in objects40jc:
-                pxvec.push_back(obj.px())
-                pyvec.push_back(obj.py())
-                pzvec.push_back(obj.pz())
-                Evec.push_back(obj.energy())
-
-            #### get hemispheres (seed 2: max inv mass, association method: default 3 = minimal lund distance)
-
-            hemisphere = Hemisphere(pxvec, pyvec, pzvec, Evec, 2, 3)
-            grouping=hemisphere.getGrouping()
-##            print 'grouping ',len(grouping)
-
-            pseudoJet1px = 0
-            pseudoJet1py = 0
-            pseudoJet1pz = 0
-            pseudoJet1energy = 0
-
-            pseudoJet2px = 0
-            pseudoJet2py = 0
-            pseudoJet2pz = 0
-            pseudoJet2energy = 0
-
-            for index in range(0, len(pxvec)):
-                if(grouping[index]==1):
-                    pseudoJet1px += pxvec[index]
-                    pseudoJet1py += pyvec[index]
-                    pseudoJet1pz += pzvec[index]
-                    pseudoJet1energy += Evec[index]
-                if(grouping[index]==2):
-                    pseudoJet2px += pxvec[index]
-                    pseudoJet2py += pyvec[index]
-                    pseudoJet2pz += pzvec[index]
-                    pseudoJet2energy += Evec[index]
-
-            zll_pseudoJet1 = ROOT.reco.Particle.LorentzVector( pseudoJet1px, pseudoJet1py, pseudoJet1pz, pseudoJet1energy)
-            zll_pseudoJet2 = ROOT.reco.Particle.LorentzVector( pseudoJet2px, pseudoJet2py, pseudoJet2pz, pseudoJet2energy)
-
-            event.zll_mt2 = self.computeMT2(zll_pseudoJet1, zll_pseudoJet2, event.zll_met)
+            event.zll_mt2 = self.getMT2Hemi(event,objects40jc,event.zll_met,"_zll")
 
 
 #### do the mt2 with one or two b jets (medium CSV)                                                                                                                                                                                                         
@@ -470,10 +302,12 @@ class ttHTopoVarAnalyzer( Analyzer ):
         event.pseudoJet2 = ROOT.reco.Particle.LorentzVector( 0, 0, 0, 0 )
 
         event.gamma_mt2=-999
-        event.gamma_pseudoJet1  = ROOT.reco.Particle.LorentzVector( 0, 0, 0, 0 )
-        event.gamma_pseudoJet2  = ROOT.reco.Particle.LorentzVector( 0, 0, 0, 0 )
+        event.pseudoJet1_gamma  = ROOT.reco.Particle.LorentzVector( 0, 0, 0, 0 )
+        event.pseudoJet2_gamma  = ROOT.reco.Particle.LorentzVector( 0, 0, 0, 0 )
 
         event.zll_mt2=-999
+        event.pseudoJet1_zll  = ROOT.reco.Particle.LorentzVector( 0, 0, 0, 0 )
+        event.pseudoJet2_zll  = ROOT.reco.Particle.LorentzVector( 0, 0, 0, 0 )
 
         event.mt2ViaKt_had=-999
         event.mt2ViaAKt_had=-999
