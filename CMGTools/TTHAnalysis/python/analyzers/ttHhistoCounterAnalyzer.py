@@ -20,8 +20,8 @@ class ttHhistoCounterAnalyzer( Analyzer ):
 
     def declareHandles(self):
         super(ttHhistoCounterAnalyzer, self).declareHandles()
-	self.mchandles['LHEweights'] = AutoHandle( 'source', 'LHEEventProduct', mayFail = True, lazy = False )
-    
+	self.mchandles['LHEweights'] = AutoHandle( 'externalLHEProducer', 'LHEEventProduct', mayFail = True, lazy = False )
+
     def beginLoop(self, setup):
         super(ttHhistoCounterAnalyzer,self).beginLoop(setup)
         self.counters.addCounter('pairs')
