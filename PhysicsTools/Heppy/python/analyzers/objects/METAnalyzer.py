@@ -28,6 +28,15 @@ class METAnalyzer( Analyzer ):
         self.handles['vertices'] =  AutoHandle( "offlineSlimmedPrimaryVertices", 'std::vector<reco::Vertex>', fallbackLabel="offlinePrimaryVertices" )
         self.mchandles['packedGen'] = AutoHandle( 'packedGenParticles', 'std::vector<pat::PackedGenParticle>' )
 
+        self.handles['metAK4'] = AutoHandle( "pfType1CorrectedMet", 'vector<reco::PFMET>' )
+        self.handles['metAK4chs'] = AutoHandle( "pfType1CorrectedMetCHS", 'vector<reco::PFMET>' )
+
+        self.handles['metAK420'] = AutoHandle( "pfType1CorrectedMet20", 'vector<reco::PFMET>' )
+        self.handles['metAK4chs20'] = AutoHandle( "pfType1CorrectedMetCHS20", 'vector<reco::PFMET>' )
+
+        self.handles['metAK4Mix'] = AutoHandle( "pfType1CorrectedMetMix", 'vector<reco::PFMET>' )
+
+
     def beginLoop(self, setup):
         super(METAnalyzer,self).beginLoop(setup)
         self.counters.addCounter('events')
@@ -102,6 +111,15 @@ class METAnalyzer( Analyzer ):
     def makeGenTkMet(self, event):
         genCharged = [ x for x in self.mchandles['packedGen'].product() if x.charge() != 0 and abs(x.eta()) < 2.4 ]
         event.tkGenMet = ROOT.reco.Particle.LorentzVector(-1.*(sum([x.px() for x in genCharged])) , -1.*(sum([x.py() for x in genCharged])), 0, math.hypot((sum([x.px() for x in genCharged])),(sum([x.py() for x in genCharged]))) )
+
+
+    def makeSpecialMETs(self, event):
+        event.ak4MET = ROOT.pat.MET(self.handles['metAK4'].product()[0])
+        event.ak4chsMET = ROOT.pat.MET(self.handles['metAK4chs'].product()[0])
+        event.ak4pt20MET = ROOT.pat.MET(self.handles['metAK420'].product()[0])
+        event.ak4chspt20MET = ROOT.pat.MET(self.handles['metAK4chs20'].product()[0])
+        event.ak4Mix = ROOT.pat.MET(self.handles['metAK4Mix'].product()[0])
+
 
     def makeMETNoMu(self, event):
         self.metNoMu = copy.deepcopy(self.met)
@@ -223,6 +241,9 @@ class METAnalyzer( Analyzer ):
         self.counters.counter('events').inc('all events')
 
         self.makeMETs(event)
+
+        if self.cfg_ana.doSpecialMet:
+            self.makeSpecialMETs(event)
 
         if self.cfg_ana.doTkMet: 
             self.makeTkMETs(event);
