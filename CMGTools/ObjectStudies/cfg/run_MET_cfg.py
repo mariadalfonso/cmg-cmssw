@@ -14,15 +14,12 @@ triggers_8TeV_mumu = ["HLT_Mu17_Mu8_v*","HLT_Mu17_TkMu8_v*"]
 triggers_8TeV_1mu = [ 'HLT_IsoMu24_eta2p1_v*' ]
 
 triggerFlagsAna.triggerBits = {
-#            'SingleMu' : triggers_1mu_isolow,
-#            'DoubleMu' : triggers_mumu_iso,
             'SingleMu' : triggers_8TeV_1mu,
             'DoubleMu' : triggers_8TeV_mumu,
 }
 
 #-------- SEQUENCE
 
-##from CMGTools.TTHAnalysis.analyzers.treeProducerMET import *
 from CMGTools.ObjectStudies.analyzers.treeProducerMET import *
 
 treeProducer = cfg.Analyzer(
@@ -42,6 +39,7 @@ treeProducer.treename = 'Events'
 #-------- SEQUENCE
 
 metAna.doTkMet = False
+metAna.doSpecialMet = True
 
 metSequence = cfg.Sequence(
     metCoreSequence +[treeProducer]
@@ -60,12 +58,13 @@ metSequence.insert(metSequence.index(lepAna)+2,
 
 #-------- SAMPLES AND TRIGGERS -----------
 from CMGTools.TTHAnalysis.samples.samples_13TeV_PHYS14 import *
+from CMGTools.TTHAnalysis.samples.samples_13TeV_74X import * 
 from CMGTools.TTHAnalysis.samples.samples_8TeVReReco_74X import * # <-- this one for the official sample 
 from CMGTools.ObjectStudies.samples.samples_METPOG_private import * #<-- this one for the private re-reco
 
 #-------- HOW TO RUN
 
-test = 0
+test = 3
 
 if test==0:
     selectedComponents = [DoubleMu_742, DoubleMu_740p9]
@@ -85,7 +84,7 @@ elif test==1:
         comp.files = comp.files[:]
 
 
-   # -----------------------PHYS14 options -------------------------------------------------------------------- #
+   # ----------------------- Summer15 options -------------------------------------------------------------------- #
 
 elif test==2:
     # test a single component, using a single thread.
@@ -95,16 +94,19 @@ elif test==2:
     ## 25 ns ttbar PHYS14
 #    comp = TTJets
 #    comp.files = comp.files[:1]
-    comp=TTJets
-    comp.files = ['/afs/cern.ch/work/d/dalfonso/public/ttjets_miniaodsim_00C90EFC-3074-E411-A845-002590DB9262.root']
+#    comp=TTJets
+#    comp.files = ['/afs/cern.ch/work/d/dalfonso/public/ttjets_miniaodsim_00C90EFC-3074-E411-A845-002590DB9262.root']
+    comp=DYJetsToLL_M50_50ns
+    comp.files = ['/tmp/dalfonso/04963444-D107-E511-B245-02163E00F339.root']
     selectedComponents = [comp]
     comp.splitFactor = 1
 
 elif test==3:
     # test all components (1 thread per component).
-    selectedComponents = [ DYJetsToLL_M50_PU4bx50,DYJetsToLL_M50]
+    selectedComponents = [ DYJetsToLL_M50_50ns ]
     for comp in selectedComponents:
         comp.splitFactor = 251
+        comp.fineSplitFactor = 5 
         comp.files = comp.files[:]
         #comp.files = comp.files[:1]
 
@@ -135,16 +137,14 @@ if getHeppyOption("nofetch"):
 
 # -------------------- Running pre-processor
 
-#from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
-#from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
-#preprocessor = CmsswPreprocessor("/afs/cern.ch/work/d/dalfonso/CMSSW_7_2_3_type1/src/PhysicsTools/PatAlgos/test/Type1Central.py")
-
+from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
+preprocessor = CmsswPreprocessor("/afs/cern.ch/work/d/dalfonso/CMSSW_7_4_3_metType1/src/CMGTools/ObjectStudies/cfg/Type1Central.py")
 
 
 config = cfg.Config( components = selectedComponents,
                      sequence = metSequence,
                      services = [output_service],
-#                     preprocessor=preprocessor, # comment if pre-processor non needed
+                     preprocessor=preprocessor, # comment if pre-processor non needed
 #                     events_class = event_class)
                      events_class = Events)
 
