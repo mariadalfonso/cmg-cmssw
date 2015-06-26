@@ -64,7 +64,7 @@ from CMGTools.ObjectStudies.samples.samples_METPOG_private import * #<-- this on
 
 #-------- HOW TO RUN
 
-test = 3
+test = 1
 
 if test==0:
     selectedComponents = [DoubleMu_742, DoubleMu_740p9]
@@ -75,13 +75,14 @@ if test==0:
         comp.triggers = triggers_8TeV_mumu
 
 elif test==1:
-    selectedComponents = [ RelValZMM_7_4_1,RelValZMM_7_4_0_pre9 ]
+#    selectedComponents = [ RelValZMM_7_4_1,RelValZMM_7_4_0_pre9 ]
+    selectedComponents = [ RelValZMM_7_4_1 ]
 #    selectedComponents = [RelVal_741_Philfixes]
 #    selectedComponents = relValkate
     for comp in selectedComponents:
-#        comp.splitFactor = 1
-        comp.splitFactor = 100
-        comp.files = comp.files[:]
+        comp.splitFactor = 1
+#        comp.splitFactor = 100
+        comp.files = comp.files[:1]
 
 
    # ----------------------- Summer15 options -------------------------------------------------------------------- #
@@ -138,7 +139,7 @@ if getHeppyOption("nofetch"):
 # -------------------- Running pre-processor
 
 from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
-preprocessor = CmsswPreprocessor("/afs/cern.ch/work/d/dalfonso/CMSSW_7_4_3_metType1/src/CMGTools/ObjectStudies/cfg/Type1Central.py")
+preprocessor = CmsswPreprocessor("$CMSSW_BASE/src/CMGTools/ObjectStudies/cfg/Type1Central.py")
 
 
 config = cfg.Config( components = selectedComponents,
