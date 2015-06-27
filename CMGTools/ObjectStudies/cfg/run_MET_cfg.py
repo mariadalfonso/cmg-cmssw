@@ -3,6 +3,7 @@ import PhysicsTools.HeppyCore.framework.config as cfg
 #Load all analyzers
 from CMGTools.ObjectStudies.analyzers.metCoreModules_cff import *
 
+cfg.Analyzer.nosubdir = True
 
 ##------------------------------------------
 ##  PRODUCER
@@ -105,8 +106,8 @@ elif test==3:
     # test all components (1 thread per component).
     selectedComponents = [ DYJetsToLL_M50_50ns ]
     for comp in selectedComponents:
-        comp.splitFactor = 251
-        comp.fineSplitFactor = 5 
+        comp.splitFactor = 500
+        comp.fineSplitFactor = 10
         comp.files = comp.files[:]
         #comp.files = comp.files[:1]
 
@@ -138,7 +139,7 @@ if getHeppyOption("nofetch"):
 # -------------------- Running pre-processor
 
 from PhysicsTools.Heppy.utils.cmsswPreprocessor import CmsswPreprocessor
-preprocessor = CmsswPreprocessor("/afs/cern.ch/work/d/dalfonso/CMSSW_7_4_3_metType1/src/CMGTools/ObjectStudies/cfg/Type1Central.py")
+preprocessor = CmsswPreprocessor("$CMSSW_BASE/src/CMGTools/ObjectStudies/cfg/Type1Central.py")
 
 
 config = cfg.Config( components = selectedComponents,

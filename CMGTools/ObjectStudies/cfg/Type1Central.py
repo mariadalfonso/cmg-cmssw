@@ -1,4 +1,5 @@
 import FWCore.ParameterSet.Config as cms
+import os
 
 # Define the CMSSW process
 process = cms.Process("TREE")
@@ -33,7 +34,7 @@ process.GlobalTag.globaltag = 'MCRUN2_74_V9A::All'   # for Simulation #same glob
 from CondCore.DBCommon.CondDBSetup_cfi import *
 era = 'Summer15_V5_MC'
 process.jec = cms.ESSource("PoolDBESSource",CondDBSetup,
-                           connect = cms.string('sqlite_file:'+'/afs/cern.ch/work/d/dalfonso/CMSSW_7_4_3_metType1/src/CMGTools/ObjectStudies/cfg/'+era+'.db'),                           
+                           connect = cms.string('sqlite_file:'+os.path.expandvars('$CMSSW_BASE/src/CMGTools/RootTools/data/jec/'+era+'.db')),
                            toGet =  cms.VPSet(
           cms.PSet(
               record = cms.string("JetCorrectionsRecord"),
