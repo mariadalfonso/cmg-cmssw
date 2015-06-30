@@ -52,7 +52,7 @@ QCD_Pt120to170 = kreator.makeMCComponent("QCD_Pt120to170","/QCD_Pt_120to170_Tune
 QCD_Pt170to300 = kreator.makeMCComponent("QCD_Pt170to300","/QCD_Pt_170to300_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM", "CMS", ".*root", 117276)
 QCD_Pt300to470 = kreator.makeMCComponent("QCD_Pt300to470","/QCD_Pt_300to470_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM", "CMS", ".*root", 7823)
 QCD_Pt470to600 = kreator.makeMCComponent("QCD_Pt470to600","/QCD_Pt_470to600_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM", "CMS", ".*root", 648.2)
-QCD_Pt800to1000 = kreator.makeMCComponent("QCD_Pt800to1000","/QCD_Pt_8000to1000_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM", "CMS", ".*root", 32.293)
+QCD_Pt800to1000 = kreator.makeMCComponent("QCD_Pt800to1000","/QCD_Pt_800to1000_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM", "CMS", ".*root", 32.293)
 QCD_Pt1000to1400 = kreator.makeMCComponent("QCD_Pt1000to1400","/QCD_Pt_1000to1400_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM", "CMS", ".*root", 9.4183)
 QCD_Pt1400to1800 = kreator.makeMCComponent("QCD_Pt1400to1800","/QCD_Pt_1400to1800_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM", "CMS", ".*root", 0.84265)
 QCD_Pt1800to2400 = kreator.makeMCComponent("QCD_Pt1800to2400","/QCD_Pt_1800to2400_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM", "CMS", ".*root", 0.114943)
@@ -85,18 +85,18 @@ DYJetsToLL_M50_50ns = kreator.makeMCComponent("DYJetsToLL_M50_50ns","/DYJetsToLL
 WJetsToLNu_50ns = kreator.makeMCComponent("WJetsToLNu_50ns","/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM", "CMS", ".*root", 20508.9)
 
 ### QCD
-QCD_Pt80to120_50ns = kreator.makeMCComponent("QCD_Pt80to120_50ns","/QCD_Pt_80to120_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9A-v1/MINIAODSIM", "CMS", ".*root", 2762530)
-QCD_Pt120to170_50ns = kreator.makeMCComponent("QCD_Pt120to170_50ns","/QCD_Pt_120to170_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9A-v1/MINIAODSIM", "CMS", ".*root", 471100)
-QCD_Pt170to300_50ns = kreator.makeMCComponent("QCD_Pt170to300_50ns","/QCD_Pt_170to300_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9A-v2/MINIAODSIM", "CMS", ".*root", 117276)
-QCD_Pt300to470_50ns = kreator.makeMCComponent("QCD_Pt300to470_50ns","/QCD_Pt_300to470_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9A-v1/MINIAODSIM", "CMS", ".*root", 7823)
-QCD_Pt470to600_50ns = kreator.makeMCComponent("QCD_Pt470to600_50ns","/QCD_Pt_470to600_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9A-v2/MINIAODSIM", "CMS", ".*root", 648.2)
-QCD_Pt600to800_50ns = kreator.makeMCComponent("QCD_Pt600to800_50ns","/QCD_Pt_600to800_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9A-v2/MINIAODSIM", "CMS", ".*root", 186.9)
-QCD_Pt800to1000_50ns = kreator.makeMCComponent("QCD_Pt800to1000_50ns","/QCD_Pt_8000to1000_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9A-v2/MINIAODSIM", "CMS", ".*root", 32.293)
-QCD_Pt1000to1400_50ns = kreator.makeMCComponent("QCD_Pt1000to1400_50ns","/QCD_Pt_1000to1400_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9A-v1/MINIAODSIM", "CMS", ".*root", 9.4183)
-QCD_Pt1400to1800_50ns = kreator.makeMCComponent("QCD_Pt1400to1800_50ns","/QCD_Pt_1400to1800_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9A-v1/MINIAODSIM", "CMS", ".*root", 0.84265)
-QCD_Pt1800to2400_50ns = kreator.makeMCComponent("QCD_Pt1800to2400_50ns","/QCD_Pt_1800to2400_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9A-v1/MINIAODSIM", "CMS", ".*root", 0.114943)
-QCD_Pt2400to3200_50ns = kreator.makeMCComponent("QCD_Pt2400to3200_50ns","/QCD_Pt_2400to3200_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9A-v1/MINIAODSIM", "CMS", ".*root", 0.00682981)
-QCD_Pt3200toInf_50ns = kreator.makeMCComponent("QCD_Pt3200_50ns","/QCD_Pt_3200toInf_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9A-v1/MINIAODSIM", "CMS", ".*root", 0.000165445)
+QCD_Pt80to120_50ns = kreator.makeMCComponent("QCD_Pt80to120_50ns","/QCD_Pt_80to120_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM", "CMS", ".*root", 2762530)
+QCD_Pt120to170_50ns = kreator.makeMCComponent("QCD_Pt120to170_50ns","/QCD_Pt_120to170_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM", "CMS", ".*root", 471100)
+QCD_Pt170to300_50ns = kreator.makeMCComponent("QCD_Pt170to300_50ns","/QCD_Pt_170to300_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/MINIAODSIM", "CMS", ".*root", 117276)
+QCD_Pt300to470_50ns = kreator.makeMCComponent("QCD_Pt300to470_50ns","/QCD_Pt_300to470_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM", "CMS", ".*root", 7823)
+QCD_Pt470to600_50ns = kreator.makeMCComponent("QCD_Pt470to600_50ns","/QCD_Pt_470to600_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/MINIAODSIM", "CMS", ".*root", 648.2)
+QCD_Pt600to800_50ns = kreator.makeMCComponent("QCD_Pt600to800_50ns","/QCD_Pt_600to800_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/MINIAODSIM", "CMS", ".*root", 186.9)
+QCD_Pt800to1000_50ns = kreator.makeMCComponent("QCD_Pt800to1000_50ns","/QCD_Pt_800to1000_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/MINIAODSIM", "CMS", ".*root", 32.293)
+QCD_Pt1000to1400_50ns = kreator.makeMCComponent("QCD_Pt1000to1400_50ns","/QCD_Pt_1000to1400_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM", "CMS", ".*root", 9.4183)
+QCD_Pt1400to1800_50ns = kreator.makeMCComponent("QCD_Pt1400to1800_50ns","/QCD_Pt_1400to1800_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM", "CMS", ".*root", 0.84265)
+QCD_Pt1800to2400_50ns = kreator.makeMCComponent("QCD_Pt1800to2400_50ns","/QCD_Pt_1800to2400_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM", "CMS", ".*root", 0.114943)
+QCD_Pt2400to3200_50ns = kreator.makeMCComponent("QCD_Pt2400to3200_50ns","/QCD_Pt_2400to3200_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM", "CMS", ".*root", 0.00682981)
+QCD_Pt3200toInf_50ns = kreator.makeMCComponent("QCD_Pt3200_50ns","/QCD_Pt_3200toInf_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v1/MINIAODSIM", "CMS", ".*root", 0.000165445)
 
 QCDPt_50ns = [
 QCD_Pt80to120_50ns,
@@ -115,11 +115,11 @@ QCD_Pt3200toInf_50ns
 
 ### ----------------------------- summary ----------------------------------------
 
-mcSamples = RelVals740
-
 mcSamples_Asymptotic25ns = [ TTJets, TTJets_LO, WJetsToLNu, DYJetsToLL_M50, DYJetsToLL_M50_Flat10to50_25ns] + WJetsToLNuHT + QCDPt
 
 mcSamples_Asymptotic50ns = [ TTJets_50ns, TTJets_LO_50ns, WJetsToLNu_50ns, DYJetsToLL_M50_50ns ] + QCDPt_50ns
+
+mcSamples = RelVals740 + mcSamples_Asymptotic25ns + mcSamples_Asymptotic50ns
 
 ### ---------------------------------------------------------------------
 
@@ -127,7 +127,7 @@ from CMGTools.TTHAnalysis.setup.Efficiencies import *
 dataDir = "$CMSSW_BASE/src/CMGTools/TTHAnalysis/data"
 
 #Define splitting
-for comp in mcSamples + mcSamples_Asymptotic25ns + mcSamples_Asymptotic50ns:
+for comp in mcSamples:
     comp.isMC = True
     comp.isData = False
     comp.splitFactor = 250 #  if comp.name in [ "WJets", "DY3JetsM50", "DY4JetsM50","W1Jets","W2Jets","W3Jets","W4Jets","TTJetsHad" ] else 100
