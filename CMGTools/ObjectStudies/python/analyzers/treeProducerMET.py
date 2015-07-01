@@ -32,6 +32,17 @@ met_globalVariables = [
 
    # ----------------------- type1met studies info -------------------------------------------------------------------- #     
 
+    NTupleVariable("metType1_Pt", lambda ev : ev.metType1.pt() if  hasattr(ev,'metType1') else  0 , help="type1, V5, pt"),
+    NTupleVariable("metType1_Phi", lambda ev : ev.metType1.phi() if  hasattr(ev,'metType1') else  0 , help="type1, V5, phi"),
+
+    NTupleVariable("metType1D_Pt", lambda ev : ev.metType1D.pt() if  hasattr(ev,'metType1D') else  0 , help="type1, V5, pt"),
+    NTupleVariable("metType1D_Phi", lambda ev : ev.metType1D.phi() if  hasattr(ev,'metType1D') else  0 , help="type1, V5, phi"),
+
+    NTupleVariable("metType1U_Pt", lambda ev : ev.metType1U.pt() if  hasattr(ev,'metType1U') else  0 , help="type1, V5, pt"),
+    NTupleVariable("metType1U_Phi", lambda ev : ev.metType1U.phi() if  hasattr(ev,'metType1U') else  0 , help="type1, V5, phi"),
+
+   # -------------
+
     NTupleVariable("ak4MET_Pt", lambda ev : ev.ak4MET.pt() if  hasattr(ev,'ak4MET') else  0 , help="type1, V4, pt"),
     NTupleVariable("ak4MET_Phi", lambda ev : ev.ak4MET.phi() if  hasattr(ev,'ak4MET') else  0 , help="ype1, V4, phi"),
 
@@ -88,4 +99,5 @@ met_collections = {
     "gentauleps"      : NTupleCollection("genLepFromTau", genParticleWithLinksType, 10, help="Generated leptons (e/mu) from decays of taus from W/Z/h decays"),
     "gentaus"         : NTupleCollection("genTau",     genParticleWithLinksType, 10, help="Generated leptons (tau) from W/Z decays"),                            
     "generatorSummary" : NTupleCollection("GenPart", genParticleWithLinksType, 100 , help="Hard scattering particles, with ancestry and links"),
+#    "selectedLeptons" : NTupleCollection("lep", leptonType, 50, help="Leptons after the preselection", filter=lambda l : l.pt()>10 ),
     }

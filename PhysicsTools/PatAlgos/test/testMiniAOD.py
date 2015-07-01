@@ -1,4 +1,5 @@
 import FWCore.ParameterSet.Config as cms
+import os
 
 # Define the CMSSW process
 process = cms.Process("RERUN")
@@ -29,13 +30,34 @@ process.maxEvents = cms.untracked.PSet(
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
 process.GlobalTag.globaltag = 'MCRUN2_74_V9A::All'   # for Simulation #same globalTag
 
+from CondCore.DBCommon.CondDBSetup_cfi import *
+era = 'Summer15_V5_MC'
+process.jec = cms.ESSource("PoolDBESSource",CondDBSetup,
+                           connect = cms.string('sqlite_file:'+os.path.expandvars('$CMSSW_BASE/src/CMGTools/RootTools/data/jec/'+era+'.db')),
+                           toGet =  cms.VPSet(
+          cms.PSet(
+              record = cms.string("JetCorrectionsRecord"),
+              tag = cms.string("JetCorrectorParametersCollection_"+era+"_AK4PF"),
+              label= cms.untracked.string("AK4PF")
+              ),
+            cms.PSet(
+              record = cms.string("JetCorrectionsRecord"),
+              tag = cms.string("JetCorrectorParametersCollection_"+era+"_AK4PFchs"),
+              label= cms.untracked.string("AK4PFchs")
+              ),
+          )
+)
+process.es_prefer_jec = cms.ESPrefer("PoolDBESSource",'jec')
+
+
+
 ### =====================================================================================================
 
 
 # Define the input source
 process.source = cms.Source("PoolSource", 
     fileNames = cms.untracked.vstring([
-"root://eoscms//eos/cms/store/relval/CMSSW_7_4_1/RelValTTbar_13/MINIAODSIM/PU25ns_MCRUN2_74_V9_gensim_740pre7-v1/00000/40D9C504-07ED-E411-811D-00259059642E.root"
+'root://eoscms//eos/cms/store/mc/RunIISpring15DR74/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/Asympt50ns_MCRUN2_74_V9A-v2/60000/001C7571-0511-E511-9B8E-549F35AE4FAF.root'
     ])
 )
 
@@ -60,40 +82,40 @@ runMETCorrectionsAndUncertainties(process, metType="PF",
                                   postfix="",
                                   )
 
-#MET T1+Txy
-runMETCorrectionsAndUncertainties(process, metType="PF",
-                                  correctionLevel=["T1","Txy"],
-                                  computeUncertainties=True,
-                                  produceIntermediateCorrections=False,
-                                  addToPatDefaultSequence=False,
-                                  jetCollection="selectedPatJets",
-                                  electronCollection="slimmedElectrons",
-                                  muonCollection="slimmedMuons",
-                                  tauCollection="slimmedTaus",
-                                  reclusterJets = True,
-                                  pfCandCollection = "packedPFCandidates",
-                                  onMiniAOD=True,
-                                  postfix="",
-                                  )
+##MET T1+Txy
+#runMETCorrectionsAndUncertainties(process, metType="PF",
+#                                  correctionLevel=["T1","Txy"],
+#                                  computeUncertainties=True,
+#                                  produceIntermediateCorrections=False,
+#                                  addToPatDefaultSequence=False,
+#                                  jetCollection="selectedPatJets",
+#                                  electronCollection="slimmedElectrons",
+#                                  muonCollection="slimmedMuons",
+#                                  tauCollection="slimmedTaus",
+#                                  reclusterJets = True,
+#                                  pfCandCollection = "packedPFCandidates",
+#                                  onMiniAOD=True,
+#                                  postfix="",
+#                                  )
 
 
 process.MINIAODSIMoutput = cms.OutputModule("PoolOutputModule",
     compressionLevel = cms.untracked.int32(4),
     compressionAlgorithm = cms.untracked.string('LZMA'),
     eventAutoFlushCompressedSize = cms.untracked.int32(15728640),
-    outputCommands = cms.untracked.vstring( "keep *_ak4PFJets_*_RERUN",
+    outputCommands = cms.untracked.vstring(# "keep *_ak4PFJets_*_RERUN",
                                             "keep *_pfMet_*_RERUN",
                                             "keep *_patPFMetT1Txy_*_RERUN",
                                             "keep *_patPFMetT1*En*_*_RERUN",
                                             "keep *_patPFMetT1*Res*_*_RERUN",
                                             "keep *_patPFMet_*_RERUN",
                                            # "keep *_*_*_PAT",
-                                            "keep *_patJets_*_*",
-                                            "keep *_slimmedMETs_*_*",
-                                            "keep *_patJetCorrFactors_*_*",
-                                            "keep *_selectedPatJetsForMetT1T2Corr_*_*",
-                                            "keep *_fixedGridRhoFastjetAll_*_*"
-                                            #"keep *_patMETs*_*_RERUN",
+                                           # "keep *_patJets_*_*",
+                                           # "keep *_slimmedMETs_*_*",
+                                           # "keep *_patJetCorrFactors_*_*",
+                                           # "keep *_selectedPatJetsForMetT1T2Corr_*_*",
+                                           # "keep *_fixedGridRhoFastjetAll_*_*"
+                                           # "keep *_patMETs*_*_RERUN",
                                            ),
     fileName = cms.untracked.string('testminiAOD.root'),
     dataset = cms.untracked.PSet(
@@ -107,3 +129,9 @@ process.MINIAODSIMoutput = cms.OutputModule("PoolOutputModule",
 
 
 process.MINIAODSIMoutput_step = cms.EndPath(process.MINIAODSIMoutput)
+
+dumpFile  = open("MattType1Central_dump.py", "w")
+dumpFile.write(process.dumpPython())
+dumpFile.close()
+
+
