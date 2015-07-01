@@ -28,6 +28,11 @@ class METAnalyzer( Analyzer ):
         self.handles['vertices'] =  AutoHandle( "offlineSlimmedPrimaryVertices", 'std::vector<reco::Vertex>', fallbackLabel="offlinePrimaryVertices" )
         self.mchandles['packedGen'] = AutoHandle( 'packedGenParticles', 'std::vector<pat::PackedGenParticle>' )
 
+        self.handles['metType1'] = AutoHandle( "patPFMetT1Txy", 'vector<pat::MET>' )
+        self.handles['metType1D'] = AutoHandle( "patPFMetT1JetEnDown", 'vector<pat::MET>' )
+        self.handles['metType1U'] = AutoHandle( "patPFMetT1JetEnUp", 'vector<pat::MET>' )
+
+
     def beginLoop(self, setup):
         super(METAnalyzer,self).beginLoop(setup)
         self.counters.addCounter('events')
@@ -102,6 +107,12 @@ class METAnalyzer( Analyzer ):
     def makeGenTkMet(self, event):
         genCharged = [ x for x in self.mchandles['packedGen'].product() if x.charge() != 0 and abs(x.eta()) < 2.4 ]
         event.tkGenMet = ROOT.reco.Particle.LorentzVector(-1.*(sum([x.px() for x in genCharged])) , -1.*(sum([x.py() for x in genCharged])), 0, math.hypot((sum([x.px() for x in genCharged])),(sum([x.py() for x in genCharged]))) )
+
+
+    def makeSpecialMETs(self, event):
+        event.metType1 = ROOT.pat.MET(self.handles['metType1'].product()[0])
+        event.metType1U = ROOT.pat.MET(self.handles['metType1U'].product()[0])
+        event.metType1D = ROOT.pat.MET(self.handles['metType1D'].product()[0])
 
     def makeMETNoMu(self, event):
         self.metNoMu = copy.deepcopy(self.met)
@@ -223,6 +234,9 @@ class METAnalyzer( Analyzer ):
         self.counters.counter('events').inc('all events')
 
         self.makeMETs(event)
+
+        if self.cfg_ana.doSpecialMet:
+            self.makeSpecialMETs(event)
 
         if self.cfg_ana.doTkMet: 
             self.makeTkMETs(event);
