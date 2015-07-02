@@ -28,11 +28,13 @@ RelVals740 = [ TT_NoPU, TT_bx25, TT_bx50, TTLep_NoPU, ZEE_bx50, ZEE_bx25, ZMM_bx
 TTJets = kreator.makeMCComponent("TTJets", "/TTJets_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM", "CMS", ".*root", 831.76, True)
 TTJets_LO = kreator.makeMCComponent("TTJets_LO", "/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM", "CMS", ".*root", 809.1)
 
+
 ### V+jets inclusive
 DYJetsToLL_M50 = kreator.makeMCComponent("DYJetsToLL_M50","/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v3/MINIAODSIM", "CMS", ".*root", 2008.*3)
 WJetsToLNu = kreator.makeMCComponent("WJetsToLNu","/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM", "CMS", ".*root", 20508.9)
 
 DYJetsToLL_M50_Flat10to50_25ns = kreator.makeMCComponent("DYJetsToLL_M50_Flat10to50", "/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring15DR74-AsymptFlat10to50bx25Raw_MCRUN2_74_V9-v1/MINIAODSIM", "CMS", ".*root", 2008.*3)
+
 
 ### W+jets
 WJetsToLNu_HT100to200 = kreator.makeMCComponent("WJetsToLNu_HT100to200", "/WJetsToLNu_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM", "CMS", ".*root",1292*1.23)
@@ -113,6 +115,22 @@ QCD_Pt2400to3200_50ns,
 QCD_Pt3200toInf_50ns
 ]
 
+### ----------------------------- Zero Tesla run ----------------------------------------
+
+dataDir = "$CMSSW_BASE/src/CMGTools/TTHAnalysis/data"  # use environmental variable, useful for instance to run on CRAB
+json=dataDir+'/json/Cert_246908-248005_13TeV_PromptReco_Collisions15_ZeroTesla_JSON.txt'
+#lumi: delivered= 4.430 (/nb) recorded= 4.013 (/nb)
+
+jetHT_0T = cfg.DataComponent(
+    name = 'jetHT_0T',
+    files = kreator.getFilesFromEOS('jetHT_0T',
+                                    'firstData_JetHT_v2',
+                                    '/store/user/pandolf/MINIAOD/%s'),
+    intLumi = 4.0,
+    triggers = [],
+    json = None #json
+    )
+
 ### ----------------------------- summary ----------------------------------------
 
 mcSamples_Asymptotic25ns = [ TTJets, TTJets_LO, WJetsToLNu, DYJetsToLL_M50, DYJetsToLL_M50_Flat10to50_25ns] + WJetsToLNuHT + QCDPt
@@ -120,6 +138,9 @@ mcSamples_Asymptotic25ns = [ TTJets, TTJets_LO, WJetsToLNu, DYJetsToLL_M50, DYJe
 mcSamples_Asymptotic50ns = [ TTJets_50ns, TTJets_LO_50ns, WJetsToLNu_50ns, DYJetsToLL_M50_50ns ] + QCDPt_50ns
 
 mcSamples = RelVals740 + mcSamples_Asymptotic25ns + mcSamples_Asymptotic50ns
+
+dataSamples = [jetHT_0T]
+
 
 ### ---------------------------------------------------------------------
 
@@ -134,6 +155,11 @@ for comp in mcSamples:
     comp.puFileMC=dataDir+"/puProfile_Summer12_53X.root"
     comp.puFileData=dataDir+"/puProfile_Data12.root"
     comp.efficiency = eff2012
+
+for comp in dataSamples:
+    comp.splitFactor = 1000
+    comp.isMC = False
+    comp.isData = True
 
 if __name__ == "__main__":
    import sys
