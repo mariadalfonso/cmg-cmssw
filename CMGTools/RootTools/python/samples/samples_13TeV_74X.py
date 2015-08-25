@@ -305,6 +305,15 @@ QCD_Pt2400to3200_50ns,
 QCD_Pt3200toInf_50ns
 ]
 
+
+### specially made for low Pt photons
+QCDPt_50ns_Special = [
+QCD_Pt30to50_50ns,
+QCD_Pt50to80_50ns,
+QCD_Pt80to120_50ns,
+QCD_Pt120to170_50ns,
+]
+
 # Muon-enriched QCD, 50 ns
 QCD_Mu15_50ns = kreator.makeMCComponent("QCD_Mu15_50ns", "/QCD_Pt-20toInf_MuEnrichedPt15_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v2/MINIAODSIM", "CMS", ".*root", 720.65e6*0.00042)
 QCD_Pt15to20_Mu5_50ns = kreator.makeMCComponent("QCD_Pt15to20_Mu5_50ns", "/QCD_Pt-15to20_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISpring15DR74-Asympt50ns_MCRUN2_74_V9A-v3/MINIAODSIM", "CMS", ".*root", 1273190000*0.003)
