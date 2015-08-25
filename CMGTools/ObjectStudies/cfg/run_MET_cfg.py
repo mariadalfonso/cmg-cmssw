@@ -1,23 +1,24 @@
 import PhysicsTools.HeppyCore.framework.config as cfg
 
 #-------- SAMPLES AND TRIGGERS -----------
-from CMGTools.RootTools.samples.samples_8TeVReReco_74X import * # <-- this one for the official sample
-from CMGTools.ObjectStudies.samples.samples_METPOG_private import * #<-- this one for the private re-reco
+#from CMGTools.RootTools.samples.samples_8TeVReReco_74X import * # <-- this one for the official sample
+#from CMGTools.ObjectStudies.samples.samples_METPOG_private import * #<-- this one for the private re-reco
 from CMGTools.RootTools.samples.samples_13TeV_74X import *
 from CMGTools.RootTools.samples.samples_13TeV_DATA2015 import *
 
-from CMGTools.RootTools.samples.triggers_13TeV_Spring15 import triggers_1mu_iso_50ns, triggers_mumu, triggers_ee, triggers_photon30, triggers_photon50, triggers_photon75
+from CMGTools.RootTools.samples.triggers_13TeV_Spring15 import * #triggers_1mu_iso_50ns, triggers_mumu, triggers_ee, triggers_photon30, triggers_photon50, triggers_photon75
 
 #-------- INITIAL FLAG
 isDiJet=False
 isZSkim=False
+isData=False
 is1L=False
 isEle = False # default is diMuon
 isEarlyRun = False # to be used for the filters
 
 #-------- HOW TO RUN
 
-test = 13
+test = 7
 
 if test==0:
     isData = True
@@ -86,6 +87,20 @@ elif test==5:
     for comp in selectedComponents:
         comp.splitFactor = 1000
         comp.files = comp.files[:]
+        
+elif test==6:
+    isData = False
+    selectedComponents = [ GJets_Pt15to6000 ]
+    for comp in selectedComponents:
+        comp.splitFactor = 100
+        comp.files = comp.files[:]
+        
+elif test==7:
+    isData = False
+    selectedComponents = QCDPt_50ns_Special
+    for comp in selectedComponents:
+        comp.splitFactor = 100
+        comp.files = comp.files[:]
 
     # ------------------------------------------------------------------------------------------- #
 
@@ -144,11 +159,11 @@ elif test==15:
 ### this is for the PhotonSkim
 elif test==16:
     isData = True
-    is1PH=True
+    is1PH = True
     selectedComponents = [ SinglePhoton_Run2015B ]
     for comp in selectedComponents:
         comp.triggers = triggers_photon30
-        comp.splitFactor = 1
+        comp.splitFactor = 30
         comp.files = comp.files[:]
         comp.json = os.environ['CMSSW_BASE']+"/src/CMGTools/TTHAnalysis/data/json/Cert_246908-251883_13TeV_PromptReco_Collisions15_JSON_v2.json"
         comp.intLumi= 0.04003
