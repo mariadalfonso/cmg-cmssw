@@ -60,21 +60,50 @@ if usePrivateSQlite:
     process.jec = cms.ESSource("PoolDBESSource",CondDBSetup,
                                connect = cms.string( "frontier://FrontierPrep/CMS_COND_PHYSICSTOOLS"),
                                toGet =  cms.VPSet(
-            cms.PSet(
-                record = cms.string("JetCorrectionsRecord"),
-                tag = cms.string("JetCorrectorParametersCollection_"+era+"_AK4PF"),
-                label= cms.untracked.string("AK4PF")
-                ),
-            cms.PSet(
-                record = cms.string("JetCorrectionsRecord"),
-                tag = cms.string("JetCorrectorParametersCollection_"+era+"_AK4PFchs"),
-                label= cms.untracked.string("AK4PFchs")
-                ),
-            )
+        cms.PSet(
+          record = cms.string("JetCorrectionsRecord"),
+          tag = cms.string("JetCorrectorParametersCollection_"+era+"_AK4PF"),
+          label= cms.untracked.string("AK4PF")
+          ),
+        cms.PSet(
+          record = cms.string("JetCorrectionsRecord"),
+          tag = cms.string("JetCorrectorParametersCollection_"+era+"_AK4PFchs"),
+          label= cms.untracked.string("AK4PFchs")
+          ),
+        )
                                )
     process.es_prefer_jec = cms.ESPrefer("PoolDBESSource",'jec')
 
 ### =====================================================================================================
+#process.load("JetMETCorrections.Modules.JetResolutionESProducer_cfi")
+from CondCore.DBCommon.CondDBSetup_cfi import *
+process.jer = cms.ESSource("PoolDBESSource",CondDBSetup,
+                           #connect = cms.string( "frontier://FrontierPrep/CMS_COND_PHYSICSTOOLS"),
+                           #connect = cms.string( "frontier://FrontierPrep/CMS_CONDITIONS"),
+                           connect = cms.string("sqlite:Summer15_25nsV6_MC.db"),
+                           toGet =  cms.VPSet(
+    cms.PSet(
+      record = cms.string('JetResolutionRcd'),
+      #tag    = cms.string('JR_MC_PtResolution_Summer15_25nsV6_AK4PF'),
+      tag    = cms.string('JR_Summer15_25nsV6_MC_PtResolution_AK4PFchs'),
+      label  = cms.untracked.string('AK4PFchs_pt')
+      ),
+    cms.PSet(
+      record = cms.string("JetResolutionRcd"),
+      #tag = cms.string("JR_MC_PhiResolution_Summer15_25nsV6_AK4PF"),
+      tag = cms.string("JR_Summer15_25nsV6_MC_PhiResolution_AK4PFchs"),
+      label= cms.untracked.string("AK4PFchs_phi")
+      ),
+    cms.PSet(
+      record = cms.string('JetResolutionScaleFactorRcd'),
+      #tag    = cms.string('JR_DATAMCSF_Summer15_25nsV6_AK4PFchs'),
+      tag    = cms.string('JR_Summer15_25nsV6_MC_SF_AK4PFchs'),
+      label  = cms.untracked.string('AK4PFchs')
+      ),
+    
+    ) )
+process.es_prefer_jer = cms.ESPrefer("PoolDBESSource",'jer')
+
 
 
 # Define the input source
