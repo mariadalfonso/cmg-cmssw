@@ -80,7 +80,7 @@ from CondCore.DBCommon.CondDBSetup_cfi import *
 process.jer = cms.ESSource("PoolDBESSource",CondDBSetup,
                            #connect = cms.string( "frontier://FrontierPrep/CMS_COND_PHYSICSTOOLS"),
                            #connect = cms.string( "frontier://FrontierPrep/CMS_CONDITIONS"),
-                           connect = cms.string("sqlite:Summer15_25nsV6_MC.db"),
+                           connect = cms.string("sqlite:PhysicsTools/PatUtils/data/Summer15_25nsV6_MC.db"),
                            toGet =  cms.VPSet(
     cms.PSet(
       record = cms.string('JetResolutionRcd'),
