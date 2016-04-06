@@ -29,7 +29,7 @@ process.maxEvents = cms.untracked.PSet(
 runOnData=False #data/MC switch
 usePrivateSQlite=False #use external JECs (sqlite file)
 useHFCandidates=True #create an additionnal NoHF slimmed MET collection if the option is set to false
-applyResiduals=True #application of residual corrections. Have to be set to True once the 13 TeV residual corrections are available. False to be kept meanwhile. Can be kept to False later for private tests or for analysis checks and developments (not the official recommendation!).
+redoPuppi=False # rebuild puppiMET
 #===================================================================
 
 
@@ -105,7 +105,6 @@ process.jer = cms.ESSource("PoolDBESSource",CondDBSetup,
 process.es_prefer_jer = cms.ESPrefer("PoolDBESSource",'jer')
 
 
-
 # Define the input source
 if runOnData:
   #75X file : root://eoscms//eos/cms/store/relval/CMSSW_7_5_0/SingleElectron/MINIAOD/75X_dataRun1_HLT_v1_RelVal_electron2012D-v1/00000/A4BD1262-8F2B-E511-8470-002618943964.root
@@ -121,7 +120,6 @@ else:
 process.source = cms.Source("PoolSource", 
     fileNames = cms.untracked.vstring([ fname ])
 )
-
 
 
 ### ---------------------------------------------------------------------------
@@ -153,26 +151,18 @@ if not useHFCandidates:
                                postfix="NoHF"
                                )
 
-### -------------------------------------------------------------------
-### the lines below remove the L2L3 residual corrections when processing data
-### -------------------------------------------------------------------
-if not applyResiduals:
-    process.patPFMetT1T2Corr.jetCorrLabelRes = cms.InputTag("L3Absolute")
-    process.patPFMetT1T2SmearCorr.jetCorrLabelRes = cms.InputTag("L3Absolute")
-    process.patPFMetT2Corr.jetCorrLabelRes = cms.InputTag("L3Absolute")
-    process.patPFMetT2SmearCorr.jetCorrLabelRes = cms.InputTag("L3Absolute")
-    process.shiftedPatJetEnDown.jetCorrLabelUpToL3Res = cms.InputTag("ak4PFCHSL1FastL2L3Corrector")
-    process.shiftedPatJetEnUp.jetCorrLabelUpToL3Res = cms.InputTag("ak4PFCHSL1FastL2L3Corrector")
+if redoPuppi:
+  from PhysicsTools.PatAlgos.slimming.puppiForMET_cff import makePuppiesFromMiniAOD
+  makePuppiesFromMiniAOD( process );
 
-    if not useHFCandidates:
-          process.patPFMetT1T2CorrNoHF.jetCorrLabelRes = cms.InputTag("L3Absolute")
-          process.patPFMetT1T2SmearCorrNoHF.jetCorrLabelRes = cms.InputTag("L3Absolute")
-          process.patPFMetT2CorrNoHF.jetCorrLabelRes = cms.InputTag("L3Absolute")
-          process.patPFMetT2SmearCorrNoHF.jetCorrLabelRes = cms.InputTag("L3Absolute")
-          process.shiftedPatJetEnDownNoHF.jetCorrLabelUpToL3Res = cms.InputTag("ak4PFCHSL1FastL2L3Corrector")
-          process.shiftedPatJetEnUpNoHF.jetCorrLabelUpToL3Res = cms.InputTag("ak4PFCHSL1FastL2L3Corrector")
-### ------------------------------------------------------------------
-
+  runMetCorAndUncFromMiniAOD(process,
+                             isData=runOnData,
+                             pfCandColl=cms.InputTag("puppiForMET"),
+                             recoMetFromPFCs=True,
+                             reclusterJets=True,
+                             jetFlavor="AK4PFPuppi",
+                             postfix="Puppi"
+                             )
 
 process.MINIAODSIMoutput = cms.OutputModule("PoolOutputModule",
     compressionLevel = cms.untracked.int32(4),
@@ -180,6 +170,7 @@ process.MINIAODSIMoutput = cms.OutputModule("PoolOutputModule",
     eventAutoFlushCompressedSize = cms.untracked.int32(15728640),
     outputCommands = cms.untracked.vstring( "keep *_slimmedMETs_*_*",
                                             "keep *_slimmedMETsNoHF_*_*",
+                                            "keep *_slimmedMETsPuppi_*_*",
                                             ),
     fileName = cms.untracked.string('corMETMiniAOD.root'),
     dataset = cms.untracked.PSet(
