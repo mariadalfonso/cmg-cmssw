@@ -12,7 +12,7 @@ process.load("RecoMET/METProducers.METSignificanceParams_cfi")
 
 ##____________________________________________________________________________||
 process.load('Configuration.StandardSequences.Services_cff')
-process.load("JetMETCorrections.Modules.JetResolutionESProducer_cfi")
+#process.load("JetMETCorrections.Modules.JetResolutionESProducer_cfi")
 from CondCore.DBCommon.CondDBSetup_cfi import *
 
 process.jer = cms.ESSource("PoolDBESSource",
@@ -39,7 +39,7 @@ process.jer = cms.ESSource("PoolDBESSource",
             label  = cms.untracked.string('AK4PFchs')
             ),
         ),
-      connect = cms.string('sqlite:Summer15_25nsV6.db')
+      connect = cms.string('sqlite:Summer15_25nsV6_MC_v2.db')
       )
 
 process.es_prefer_jer = cms.ESPrefer('PoolDBESSource', 'jer')
