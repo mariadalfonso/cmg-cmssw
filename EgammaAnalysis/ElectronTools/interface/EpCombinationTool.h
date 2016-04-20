@@ -13,11 +13,8 @@ class EpCombinationTool
         EpCombinationTool();
         ~EpCombinationTool();
 
-        bool init(const std::string& regressionFile, const std::string& bdtName="");
-//        float combine(float energy, float energyError,
-//                float momentum, float momentumError, 
-//                int electronClass,
-//                bool isEcalDriven, bool isTrackerDriven, bool isEB);
+        bool init(const GBRForest *forest) ;
+        bool init(const std::string& regressionFile, const std::string& bdtName);
 	void combine(SimpleElectron & mySimpleElectron, bool applyExtraHighEnergyProtection = false);
 
 
